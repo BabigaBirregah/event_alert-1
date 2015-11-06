@@ -1,0 +1,11 @@
+{
+    "name": "event-alert",
+    "version": "0.1.0",
+    "dependencies": {
+        "express": "~3.3.4",
+        "ejs": "~2.1.4",
+        "body-parser": "~1.10.1"
+    },
+    "author": "Jean-Michel <jeanmichely@gmail.com>",
+    "description": "Alerter des incidents liés à des événements"
+}
