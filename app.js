@@ -6,5 +6,18 @@ var app = express();
 
 app.use(express.static(__dirname + '/public'))
 
+.get('/login', function(req, res) {
+    res.render('login.ejs');
+})
+
+.post('/register/', urlencodedParser, function(req, res) {
+    //req.body.username
+    
+})
+
+.use(function(req, res, next){
+    res.redirect('/login');
+})
+
 .listen(8080);
 
