@@ -11,8 +11,12 @@ app.use(express.static(__dirname + '/public'))
 })
 
 .post('/register/', urlencodedParser, function(req, res) {
-    //req.body.username
+    	//req.body.username
     
+})
+
+.get('/organizer', function(req, res) {
+    res.render('organizer/layout.ejs');
 })
 
 .use(function(req, res, next){

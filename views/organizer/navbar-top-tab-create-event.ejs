@@ -1,0 +1,120 @@
+<link rel="stylesheet" type="text/css" href="/css/jquery.datetimepicker.css"/>
+<ul class="nav navbar-nav">
+	<li class="dropdown mega-dropdown">
+		<a href="#" id="id_create_event_tab" class="dropdown-toggle" data-toggle="dropdown">Créer un événement <b class="caret"></b></a>
+		
+		<ul class="dropdown-menu mega-dropdown-menu row">
+			<li class="col-sm-12">
+                <form class="form" role="form">
+					<div class="container-fluid">
+					    <section class="container">
+							<div class="container-page">				
+								<div class="col-md-6">
+									<h3 class="dropdown-header">Créer un événement</h3>
+									
+									<div class="form-group col-lg-12">
+										<label>Titre</label>
+										<input type="" name="" class="form-control" id="" value="">
+									</div>
+									
+									<div class="form-group col-lg-12">
+										<label>Description</label>
+										<input type="text" name="" class="form-control" id="" value="">
+									</div>
+									
+									<div class="form-group col-lg-12">
+										<label>Date</label>
+										<input type="text" value="" id="datetimepicker_mask" class="form-control"/>
+									</div>
+													
+									<div class="form-group col-lg-12">
+										<label>Lieu</label>
+										<input type="text" name="" class="form-control" id="" value="">
+									</div>
+
+									<div class="form-group col-lg-12">
+										<input type="hidden" name="count" value="1" />
+								        <div class="control-group" id="fields">
+								            <label class="control-label" for="field1">Type(s) d'alerte</label>
+								            <div class="controls" id="profs"> 
+								                <div class="input-append">
+								                    <input autocomplete="off" class="span3" id="field1" name="prof1" type="text" placeholder="Type d'alerte" data-provide="typeahead" data-items="8" data-source='["Aardvark","Beatlejuice","Capricorn","Deathmaul","Epic"]'/><button id="b1" class="btn btn-info add-more" type="button">+</button>
+								                </div>
+								            	<small>Appuyez sur + pour ajouter un autre type d'alerte</small>
+								            </div>
+								        </div>
+									</div>
+								</div>
+							
+								<div class="col-md-6">
+									<h3 class="dark-grey">Localisation..</h3>
+
+									<div id="googleMap" style="width:460px;height:270px;"></div>
+									<center style="margin-top:20px"><button type="submit" class="btn btn-primary">Valider <span class="glyphicon glyphicon-thumbs-up"></button></center>
+								</div>
+							</div>
+						</section>
+					</div>
+                </form>  
+			</li>
+		</ul>
+	</li>
+</ul>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js"></script>
+<script src="/js/jquery.datetimepicker.full.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$( "#id_create_event_tab" ).trigger( "click" );		
+	});
+
+	/* Map */
+	var map;
+	var myCenter=new google.maps.LatLng(51.508742,-0.120850);
+
+	function initialize() {
+	var mapProp = {
+	  	center:myCenter,
+	  	zoom:5,
+	  	mapTypeId:google.maps.MapTypeId.ROADMAP
+	  	};
+
+	  	map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+
+	  	google.maps.event.addListener(map, 'click', function(event) {
+	    	placeMarker(event.latLng);
+	  	});
+	}
+
+	function placeMarker(location) {
+	  	var marker = new google.maps.Marker({
+	    	position: location,
+	    	map: map,
+	  	});
+	  	var infowindow = new google.maps.InfoWindow({
+	    	content: 'Latitude: ' + location.lat() + '<br>Longitude: ' + location.lng()
+	  	});
+	  	infowindow.open(map,marker);
+	}
+
+	google.maps.event.addDomListener(window, 'load', initialize);
+
+	/* Mask DateTimePicker */
+	$('#datetimepicker_mask').datetimepicker({
+		mask:'9999/19/39 29:59'
+	});
+
+	/* Multiple Form Fields */
+	$(document).ready(function(){
+	    var next = 1;
+	    $(".add-more").click(function(e){
+	        e.preventDefault();
+	        var addto = "#field" + next;
+	        next = next + 1;
+	        var newIn = '<br /><br /><input autocomplete="off" class="span3" id="field' + next + '" name="field' + next + '" type="text" data-provide="typeahead" data-items="8">';
+	        var newInput = $(newIn);
+	        $(addto).after(newInput);
+	        $("#field" + next).attr('data-source',$(addto).attr('data-source'));
+	        $("#count").val(next);  
+	    });
+	});
+</script>
