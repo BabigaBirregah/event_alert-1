@@ -1,0 +1,61 @@
+<link rel="stylesheet" type="text/css" href="/css/table-filters.css"/>
+<ul class="nav navbar-nav">
+	<li class="dropdown mega-dropdown">
+		<a href="#" id="id_create_event_tab" class="dropdown-toggle" data-toggle="dropdown">Mes événements <b class="caret"></b></a>
+		
+		<ul class="dropdown-menu mega-dropdown-menu row">
+			<li class="col-sm-12">
+                <form class="form" role="form">
+					<div class="container-fluid">
+					    <section class="container">
+							<div class="container-page">				
+								<div class="col-md-12">
+									<h3 class="dropdown-header">Mes événements</h3>
+									<div id="list-events" class="container">
+									    <div class="row">
+									        <div class="panel panel-primary filterable">
+									            <div class="panel-heading">
+									                <h3 class="panel-title">Evénements</h3>
+									                <div class="pull-right">
+									                    <span class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</span>
+									                </div>
+									            </div>
+									            <table class="table table-hover">
+									                <thead>
+									                    <tr class="filters">
+									                        <th><input type="text" class="form-control" placeholder="Titre" disabled></th>
+									                        <th><input type="text" class="form-control" placeholder="Description" disabled></th>
+									                        <th><input type="text" class="form-control" placeholder="Date" disabled></th>
+									                        <th><input type="text" class="form-control" placeholder="Lieu" disabled></th>
+									                        <th>Type d'alerte</th>
+									                    </tr>
+									                </thead>
+									                <tbody>
+									                    <tr>
+									                        <td>Match</td>
+									                        <td>France contre brésil</td>
+									                        <td>01/05/2015</td>
+									                        <td>France</td>
+									                        <td>
+									                        	<ul>
+									                        		<li>Oubli</li>
+									                        		<li>Agression</li>
+									                        	</ul>
+									                        </td>
+									                        <td><center><button class="glyphicon glyphicon-remove"></button></center></td>
+									                    </tr>
+									                </tbody>
+									            </table>
+									        </div>
+									    </div>
+									</div>
+								</div>
+							</div>
+						</section>
+					</div>
+                </form>  
+			</li>
+		</ul>
+	</li>
+</ul>
+<script src="/js/table-filters.js"></script>
