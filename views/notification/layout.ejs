@@ -1,0 +1,48 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3 col-md-3">
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <div class="btn-compose"><a type="button" class="btn btn-danger navbar-btn" href="#compose" role="tab" data-toggle="tab"> <span class="glyphicon glyphicon-pencil"></span> Compose</a></div>
+                        </h4>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a href="#inbox" role="tab" data-toggle="tab"><i class="fa fa-inbox"></i> Boite de réception <span class="label label-success">10</span></a>
+                        </h4>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a href="#sent-mail" role="tab" data-toggle="tab"><i class="fa fa-envelope-o"></i> Notifications envoyées</a>
+                        </h4>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a href="#trash" role="tab" data-toggle="tab"><i class=" fa fa-trash-o"></i> Corbeille</a>
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-7 col-md-7">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <% include inbox.ejs %>
+                        <% include compose.ejs %>
+                        <% include sent-notification.ejs %>
+                        <% include trash.ejs %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
