@@ -41,7 +41,9 @@ module.exports.routes = {
 
   '/organizer': {
     view: 'organizer/layout'
-  }
+  },
+
+  'post /user/create' : 'UserController.create',
 
   /***************************************************************************
   *                                                                          *
