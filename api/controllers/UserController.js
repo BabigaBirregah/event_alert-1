@@ -16,6 +16,7 @@ module.exports = {
 	
 		Model.create(data).exec(function created (err, user) {
 			if (err){
+				req.flash('type_flash_message', 'danger');
 				req.flash('flash_message', 'Email déjà utilisé')
 				res.redirect('/');
 			} 
@@ -28,6 +29,8 @@ module.exports = {
 					Model.publishCreate(user, !req.options.mirror && req);
 				}
 				req.session.user = user;
+
+				req.flash('type_flash_message', 'info');
 				req.flash('flash_message', 'Votre inscription a réussie');
 				res.redirect('/');
 			}
@@ -39,11 +42,13 @@ module.exports = {
 
 		User.findOne({username: values.username}).exec(function (err, user){
 			if (!user) {
+				req.flash('type_flash_message', 'danger');
 				req.flash('flash_message', 'Le nom d\'utilisateur ou le mot de passe ne correspond pas');
 				res.redirect('/');
       		} else {
 				User.comparePassword(values.password, user, function (err, valid) {
 			        if (!valid) {
+			        	req.flash('type_flash_message', 'danger');
 						req.flash('flash_message', 'Le nom d\'utilisateur ou le mot de passe ne correspond pas');
 						res.redirect('/');
 			        } else {
