@@ -8,6 +8,8 @@
     "express": "~3.3.4",
     "ejs": "~2.1.4",
     "body-parser": "~1.10.1",
+    "bcrypt": "~0.8.5",
+    "mysql": "~2.9.0",
     "grunt": "0.4.2",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-coffee": "~0.10.1",

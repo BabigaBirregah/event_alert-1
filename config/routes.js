@@ -33,17 +33,28 @@ module.exports.routes = {
   ***************************************************************************/
 
   '/': {
-    view: 'login'
+      view: 'login-signin'
+  }, 
+
+  '/login': {
+      controller: 'UserController',
+      action: 'login'
   },
 
-  '/register': {
+  '/logout': {
+      controller: 'UserController',
+      action: 'logout'
+  },
+
+  'post /user/create': {
+      controller: 'UserController',
+      action: 'create'
   },
 
   '/organizer': {
-    view: 'organizer/layout'
+      controller: 'OrganizerController',
+      action: 'index'
   },
-
-  'post /user/create' : 'UserController.create',
 
   /***************************************************************************
   *                                                                          *

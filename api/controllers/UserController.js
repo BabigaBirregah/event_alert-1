@@ -6,13 +6,58 @@
  */
 
 var bcrypt = require ('bcrypt');
-var blueprintCreate = require("../../node_modules/sails/lib/hooks/blueprints/actions/create");
+var actionUtil = require("../../node_modules/sails/lib/hooks/blueprints/actionUtil");
 
 module.exports = {
 	
 	create: function (req, res) {
-    	return blueprintCreate(req, res);
-  	}
+		var Model = actionUtil.parseModel(req);
+		var data = actionUtil.parseValues(req);
+	
+		Model.create(data).exec(function created (err, user) {
+			if (err){
+				req.flash('flash_message', 'Email déjà utilisé')
+				res.redirect('/');
+			} 
+			else {
+				if (req._sails.hooks.pubsub) {
+					if (req.isSocket) {
+						Model.subscribe(req, user);
+						Model.introduce(user);
+					}
+					Model.publishCreate(user, !req.options.mirror && req);
+				}
+				req.session.user = user;
+				req.flash('flash_message', 'Votre inscription a réussie');
+				res.redirect('/');
+			}
+		});
+	},
+
+	login: function (req, res) {
+		var values = req.allParams();
+
+		User.findOne({username: values.username}).exec(function (err, user){
+			if (!user) {
+				req.flash('flash_message', 'Le nom d\'utilisateur ou le mot de passe ne correspond pas');
+				res.redirect('/');
+      		} else {
+				User.comparePassword(values.password, user, function (err, valid) {
+			        if (!valid) {
+						req.flash('flash_message', 'Le nom d\'utilisateur ou le mot de passe ne correspond pas');
+						res.redirect('/');
+			        } else {
+			          	req.session.user = user;
+						res.redirect('organizer');
+			        }
+				});
+      		}
+		});
+	},
+
+	logout: function (req, res) {
+		req.session.destroy();
+		res.redirect('/');
+	}
 	
 };
-
