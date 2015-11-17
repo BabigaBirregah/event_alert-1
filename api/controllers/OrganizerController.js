@@ -8,7 +8,12 @@
 module.exports = {
 
 	index: function (req, res) {
-		res.view('organizer/layout', {user: req.session.user});
+		Event.find ({ organizer: req.session.user.id }).then (function (listEvent) { 
+			res.view('organizer/layout', {
+				user: req.session.user,
+				listEvent: listEvent
+			});
+		});
 	}
 	
 };

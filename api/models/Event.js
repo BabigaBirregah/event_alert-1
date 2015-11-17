@@ -9,9 +9,9 @@ module.exports = {
 
   	attributes: {
 
-  		organizer : {
+  	organizer : {
   			model: 'user'
-  		},
+  	},
 		title : { 
             type: 'string',
             required: true
@@ -21,7 +21,7 @@ module.exports = {
             required: true
         },
 		date : { 
-            type: 'datetime',
+            type: 'string',
             required: true
         },
         place : { 

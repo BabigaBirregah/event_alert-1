@@ -30,19 +30,16 @@
 									                    </tr>
 									                </thead>
 									                <tbody>
-									                    <tr>
-									                        <td>Match</td>
-									                        <td>France contre brésil</td>
-									                        <td>01/05/2015</td>
-									                        <td>France</td>
-									                        <td>
-									                        	<ul>
-									                        		<li>Oubli</li>
-									                        		<li>Agression</li>
-									                        	</ul>
-									                        </td>
-									                        <td><center><button class="glyphicon glyphicon-remove"></button></center></td>
-									                    </tr>
+														<% for(var i=0; i<listEvent.length; i++) {%>
+														   	<tr>
+																<td><%- listEvent[i].title %></td>
+																<td><%- listEvent[i].description %></td>
+																<td><%=: listEvent[i].date | formatDate %></td>
+																<td><%- listEvent[i].place %></td>
+																<td>{type_alert}</td>
+									                        	<td><center><button class="glyphicon glyphicon-remove"></button></center></td>
+														   	</tr>
+														<% } %>
 									                </tbody>
 									            </table>
 									        </div>

@@ -11,6 +11,14 @@
 
 module.exports.http = {
 
+  locals: {
+      filters: {
+          formatDate: function(date) { 
+              return "["+date+"]";
+          }
+      }
+  }
+
   /****************************************************************************
   *                                                                           *
   * Express middleware to use for every Sails request. To add custom          *

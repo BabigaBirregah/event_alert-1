@@ -15,8 +15,6 @@ module.exports = {
 		
 		data.organizer = req.session.user;
 
-		console.log(data);
-
 		Model.create(data).exec(function created (err, eventCreated) {
 			if (err){
 				req.flash('type_flash_message', 'danger');
