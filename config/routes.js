@@ -56,6 +56,11 @@ module.exports.routes = {
       action: 'index'
   },
 
+  'post /event/create': {
+      controller: 'EventController',
+      action: 'create'
+  },
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

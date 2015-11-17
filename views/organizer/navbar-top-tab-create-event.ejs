@@ -5,31 +5,32 @@
 		
 		<ul class="dropdown-menu mega-dropdown-menu row">
 			<li class="col-sm-12">
-                <form class="form" role="form">
+                <form class="form" action="event/create" method="post" role="form">
 					<div class="container-fluid">
 					    <section class="container">
 							<div class="container-page">				
 								<div class="col-md-6">
+									<%- partial('flash-message-panel.ejs') %>
 									<h3 class="dropdown-header">Créer un événement</h3>
 									
 									<div class="form-group col-lg-12">
 										<label>Titre</label>
-										<input type="" name="" class="form-control" id="" value="">
+										<input type="" name="title" class="form-control" id="" value="">
 									</div>
 									
 									<div class="form-group col-lg-12">
 										<label>Description</label>
-										<input type="text" name="" class="form-control" id="" value="">
+										<input type="text" name="description" class="form-control" id="" value="">
 									</div>
 									
 									<div class="form-group col-lg-12">
 										<label>Date</label>
-										<input type="text" value="" id="datetimepicker_mask" class="form-control"/>
+										<input type="text" id="datetimepicker_mask" name="date" class="form-control"/>
 									</div>
 													
 									<div class="form-group col-lg-12">
 										<label>Lieu</label>
-										<input type="text" name="" class="form-control" id="" value="">
+										<input type="text" name="place" class="form-control" id="" value="">
 									</div>
 
 									<div class="form-group col-lg-12">
@@ -38,7 +39,7 @@
 								            <label class="control-label" for="field1">Type(s) d'alerte</label>
 								            <div class="controls" id="profs"> 
 								                <div class="input-append">
-								                    <input autocomplete="off" class="span3" id="field1" name="prof1" type="text" placeholder="Type d'alerte" data-provide="typeahead" data-items="8" data-source='["Aardvark","Beatlejuice","Capricorn","Deathmaul","Epic"]'/><button id="b1" class="btn btn-info add-more" type="button">+</button>
+								                    <input autocomplete="off" class="span3" id="field1" name="type_alert" type="text" placeholder="Type d'alerte" data-provide="typeahead" data-items="8" data-source='["Aardvark","Beatlejuice","Capricorn","Deathmaul","Epic"]'/><button id="b1" class="btn btn-info add-more" type="button">+</button>
 								                </div>
 								            	<small>Appuyez sur + pour ajouter un autre type d'alerte</small>
 								            </div>
@@ -110,7 +111,7 @@
 	        e.preventDefault();
 	        var addto = "#field" + next;
 	        next = next + 1;
-	        var newIn = '<br /><br /><input autocomplete="off" class="span3" id="field' + next + '" name="field' + next + '" type="text" data-provide="typeahead" data-items="8">';
+	        var newIn = '<br /><br /><input autocomplete="off" class="span3" id="field' + next + '" name="type_alert' + next + '" type="text" data-provide="typeahead" data-items="8">';
 	        var newInput = $(newIn);
 	        $(addto).after(newInput);
 	        $("#field" + next).attr('data-source',$(addto).attr('data-source'));
