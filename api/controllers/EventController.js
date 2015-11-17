@@ -30,11 +30,10 @@ module.exports = {
 					Model.publishCreate(eventCreated, !req.options.mirror && req);
 				}
 
-				req.flash('type_flash_message', 'info');
-				req.flash('flash_message', 'Votre événement a été créé');
-				res.redirect('organizer');
+				data.id = eventCreated.id;
+				req.session.event = data;
+				res.redirect('/type-alert/create');
 			}
 		});
 	}
 };
-

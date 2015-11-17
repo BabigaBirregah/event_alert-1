@@ -61,6 +61,11 @@ module.exports.routes = {
       action: 'create'
   },
 
+  '/type-alert/create': {
+      controller: 'TypeAlertController',
+      action: 'create'
+  }
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *
