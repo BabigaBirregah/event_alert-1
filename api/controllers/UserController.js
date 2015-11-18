@@ -53,7 +53,11 @@ module.exports = {
 						res.redirect('/');
 			        } else {
 			          	req.session.user = user;
-						res.redirect('organizer');
+			          	if ( user.type == 'c' ) {
+							res.redirect('citizen');
+			          	} else if (user.type == 'o') {
+							res.redirect('organizer');
+			          	}
 			        }
 				});
       		}

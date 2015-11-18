@@ -64,7 +64,17 @@ module.exports.routes = {
   '/type-alert/create': {
       controller: 'TypeAlertController',
       action: 'create'
-  }
+  },
+
+  '/citizen': {
+      controller: 'CitizenController',
+      action: 'index'
+  },
+
+  'post /alert/create': {
+      controller: 'AlertController',
+      action: 'create'
+  },
 
   /***************************************************************************
   *                                                                          *

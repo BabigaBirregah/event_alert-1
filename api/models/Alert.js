@@ -1,5 +1,5 @@
 /**
-* Event.js
+* Alert.js
 *
 * @description :: TODO: You might write a short summary of how this model works and what it represents here.
 * @docs        :: http://sailsjs.org/#!documentation/models
@@ -8,30 +8,33 @@
 module.exports = {
 
   	attributes: {
-    	organizer : {
-    		model: 'user'
-    	},
-  		title : { 
+    	event : { 
+            type: 'string', // à changer en Event
+            required: true
+        },
+  		type : { 
+            type: 'string', // à changer en TypeAlert
+            required: true
+        },
+  		user : { 
+            model: 'user'
+        },
+        date : { 
             type: 'string',
             required: true
         },
-        description : { 
+  		details : { 
             type: 'string',
             required: true
         },
-  		date : { 
-            type: 'string',
-            required: true
+        isAnonymous : { 
+            type: 'boolean',
+            defaultsTo: false
         },
-        place : { 
-            type: 'string',
-            required: true
+        isDeleted : { 
+            type: 'boolean',
+          	defaultsTo: false
         },
-        state : { 
-          	type: 'string',
-          	defaultsTo: '1',
-          	size: 1
-        }
   	}
 };
 
