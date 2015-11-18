@@ -7,9 +7,12 @@
 
 module.exports = {
 	index: function (req, res) {
-		res.view('citizen/layout', {
-			user: req.session.user,
-		});	
+		Alert.find ({ user: req.session.user.id }).then (function (listAlert) { 
+			res.view('citizen/layout', {
+				user: req.session.user,
+				listAlert: listAlert
+			});
+		});
 	}
 };
 

@@ -14,6 +14,7 @@ module.exports = {
 		var Model = actionUtil.parseModel(req);
 		var data = actionUtil.parseValues(req);
 	
+		console.log(data);
 		Model.create(data).exec(function created (err, user) {
 			if (err){
 				req.flash('type_flash_message', 'danger');
@@ -54,7 +55,7 @@ module.exports = {
 			        } else {
 			          	req.session.user = user;
 			          	if ( user.type == 'c' ) {
-							res.redirect('citizen');
+						res.redirect('citizen');
 			          	} else if (user.type == 'o') {
 							res.redirect('organizer');
 			          	}
