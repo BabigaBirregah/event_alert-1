@@ -5,14 +5,32 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-module.exports = {
+var exports = module.exports = {
 
 	index: function (req, res) {
-		Event.find ({ organizer: req.session.user.id }).then (function (listEvent) { 
+		var render = function(req, res) {
 			res.view('organizer/layout', {
 				user: req.session.user,
-				listEvent: listEvent
+				listEvent: req.session.listEvent
 			});
+		};
+
+		var findTypesAlert = function(i) {
+			TypeAlert.find ({ event: req.session.listEvent[i].id }).then (function (typesAlert) {
+				req.session.listEvent[i]['typesAlert'] = typesAlert;
+				
+				if (i < req.session.listEvent.length-1) {
+					findTypesAlert(i+1);
+				} else {
+					render(req, res);
+				}
+			});
+		};
+
+		Event.find ({ organizer: req.session.user.id }).then (function (listEvent) { 
+			req.session.listEvent = listEvent;
+			
+			findTypesAlert(0);
 		});
 	}
 	

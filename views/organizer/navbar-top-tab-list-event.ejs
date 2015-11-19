@@ -36,7 +36,13 @@
 																<td><%- listEvent[i].description %></td>
 																<td><%=: listEvent[i].date | formatDate %></td>
 																<td><%- listEvent[i].place %></td>
-																<td>{type_alert}</td>
+																<td>
+																	<ul>
+																		<% for(var j=0; j<listEvent[i].typesAlert.length; j++) {%>
+																			<li><%- listEvent[i].typesAlert[j].name %></li>
+																		<% } %>
+																	</ul>
+																</td>
 									                        	<td><center><button class="glyphicon glyphicon-remove"></button></center></td>
 														   	</tr>
 														<% } %>
