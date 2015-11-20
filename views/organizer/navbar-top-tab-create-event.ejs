@@ -28,9 +28,9 @@
 										<input type="text" id="datetimepicker_mask" name="date" class="form-control"/>
 									</div>
 													
-									<div class="form-group col-lg-12">
+									<div class="form-group col-lg-12" hidden>
 										<label>Lieu</label>
-										<input type="text" name="place" class="form-control" id="" value="">
+										<input type="text" name="place" class="form-control" id="place" value="">
 									</div>
 
 									<div class="form-group col-lg-12">
@@ -50,7 +50,7 @@
 								<div class="col-md-6">
 									<h3 class="dark-grey">Localisation..</h3>
 
-									<div id="googleMap" style="width:460px;height:270px;"></div>
+									<div id="map" style="width:460px;height:270px;"></div>
 									<center style="margin-top:20px"><button type="submit" class="btn btn-primary">Valider <span class="glyphicon glyphicon-thumbs-up"></button></center>
 								</div>
 							</div>
@@ -68,36 +68,49 @@
 		$( "#id_create_event_tab" ).trigger( "click" );		
 	});
 
-	/* Map */
 	var map;
-	var myCenter=new google.maps.LatLng(51.508742,-0.120850);
+	var markers = [];
 
-	function initialize() {
-	var mapProp = {
-	  	center:myCenter,
-	  	zoom:5,
-	  	mapTypeId:google.maps.MapTypeId.ROADMAP
-	  	};
+	function initMap() {
+	  	var troyes = {lat: 48.2973451, lng: 4.0744009};
 
-	  	map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+		map = new google.maps.Map(document.getElementById('map'), {
+		    zoom: 8,
+		    center: troyes,
+		    mapTypeId: google.maps.MapTypeId.TERRAIN
+		});
 
-	  	google.maps.event.addListener(map, 'click', function(event) {
-	    	placeMarker(event.latLng);
+	  	map.addListener('click', function(event) {
+	    	addMarker(event.latLng);
 	  	});
 	}
 
-	function placeMarker(location) {
-	  	var marker = new google.maps.Marker({
+	function addMarker(location) {
+	  	marker = new google.maps.Marker({
 	    	position: location,
-	    	map: map,
+	    	map: map
 	  	});
-	  	var infowindow = new google.maps.InfoWindow({
-	    	content: 'Latitude: ' + location.lat() + '<br>Longitude: ' + location.lng()
-	  	});
-	  	infowindow.open(map,marker);
+	  	deleteMarkers();
+	  	$('#place').val(location.lat()+";"+location.lng());
+	  	markers.push(marker);
 	}
 
-	google.maps.event.addDomListener(window, 'load', initialize);
+	function setMapOnAll(map) {
+	  	for (var i = 0; i < markers.length; i++) {
+	    	markers[i].setMap(map);
+	  	}
+	}
+
+	function clearMarkers() {
+	  	setMapOnAll(null);
+	}
+
+	function deleteMarkers() {
+	  	clearMarkers();
+	  	markers = [];
+	}
+
+	google.maps.event.addDomListener(window, 'load', initMap);
 
 	/* Mask DateTimePicker */
 	$('#datetimepicker_mask').datetimepicker({
