@@ -81,6 +81,11 @@ module.exports.routes = {
       action: 'create'
   },
 
+  'get /alert/destroy/:id': {
+      controller: 'AlertController',
+      action: 'destroy'
+  },
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

@@ -38,8 +38,7 @@
 																<td><%=: listAlert[i].date | formatDate %></td>
 																<td><%- listAlert[i].details %></td>
 																<td><%- listAlert[i].isAnonymous %></td>
-									                        	<td><center><button class="glyphicon glyphicon-remove"></button></center></td>
-														   	</tr>
+																<td><center><a href="/alert/destroy/<%- listAlert[i].id %>">supprimer</a></center></td>														   	</tr>
 														<% } %>
 									                </tbody>
 									            </table>

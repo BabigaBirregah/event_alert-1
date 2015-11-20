@@ -1,4 +1,4 @@
-/**
+	/**
  * AlertController
  *
  * @description :: Server-side logic for managing alerts
@@ -27,6 +27,22 @@ module.exports = {
 				req.flash('flash_message', 'Votre incident a été alerté');
 				res.redirect('citizen');
 			}
+		});
+	}, 
+	destroy: function (req, res) {
+		var Model = actionUtil.parseModel(req);
+		var pk = actionUtil.requirePk(req);
+
+		Model.update({id: pk}, {isDeleted: true}).exec(function updated(err, records) {
+			if (err) {
+				req.flash('type_flash_message', 'danger');
+				req.flash('flash_message', 'Une erreur est survenue');
+				res.redirect('citizen');
+			}
+
+		    req.flash('type_flash_message', 'info');
+			req.flash('flash_message', 'L\'alerte a bien été supprimé');
+			res.redirect('citizen');
 		});
 	}
 };
