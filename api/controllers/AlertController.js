@@ -23,13 +23,6 @@ module.exports = {
 				res.redirect('citizen');
 			} 
 			else {
-				if (req._sails.hooks.pubsub) {
-					if (req.isSocket) {
-						Model.subscribe(req, alertCreated);
-						Model.introduce(alertCreated);
-					}
-					Model.publishCreate(alertCreated, !req.options.mirror && req);
-				}
 				req.flash('type_flash_message', 'info');
 				req.flash('flash_message', 'Votre incident a été alerté');
 				res.redirect('citizen');

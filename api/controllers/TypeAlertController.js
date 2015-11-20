@@ -17,15 +17,6 @@ module.exports = {
 						req.flash('type_flash_message', 'danger');
 						req.flash('flash_message', 'Une erreur est survenue');
 						res.redirect('organizer');
-					} 
-					else {
-						if (req._sails.hooks.pubsub) {
-							if (req.isSocket) {
-								TypeAlert.subscribe(req, typeAlertCreated);
-								TypeAlert.introduce(typeAlertCreated);
-							}
-							TypeAlert.publishCreate(typeAlertCreated, !req.options.mirror && req);
-						}
 					}
 				});
 			}

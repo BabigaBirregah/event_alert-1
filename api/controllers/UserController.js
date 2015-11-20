@@ -14,7 +14,6 @@ module.exports = {
 		var Model = actionUtil.parseModel(req);
 		var data = actionUtil.parseValues(req);
 	
-		console.log(data);
 		Model.create(data).exec(function created (err, user) {
 			if (err){
 				req.flash('type_flash_message', 'danger');
@@ -22,13 +21,6 @@ module.exports = {
 				res.redirect('/');
 			} 
 			else {
-				if (req._sails.hooks.pubsub) {
-					if (req.isSocket) {
-						Model.subscribe(req, user);
-						Model.introduce(user);
-					}
-					Model.publishCreate(user, !req.options.mirror && req);
-				}
 				req.session.user = user;
 
 				req.flash('type_flash_message', 'info');

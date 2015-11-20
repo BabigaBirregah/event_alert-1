@@ -6,7 +6,6 @@
  */
 
 var actionUtil = require("../../node_modules/sails/lib/hooks/blueprints/actionUtil");
-var util = require('util');
 
 module.exports = {
 
@@ -23,14 +22,6 @@ module.exports = {
 				res.redirect('organizer');
 			} 
 			else {
-				if (req._sails.hooks.pubsub) {
-					if (req.isSocket) {
-						Model.subscribe(req, eventCreated);
-						Model.introduce(eventCreated);
-					}
-					Model.publishCreate(eventCreated, !req.options.mirror && req);
-				}
-
 				data.id = eventCreated.id;
 				req.session.event = data;
 				res.redirect('/type-alert/create');
