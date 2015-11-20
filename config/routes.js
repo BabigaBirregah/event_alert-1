@@ -61,6 +61,11 @@ module.exports.routes = {
       action: 'create'
   },
 
+  'get /event/destroy/:id': {
+      controller: 'EventController',
+      action: 'destroy'
+  },
+
   '/type-alert/create': {
       controller: 'TypeAlertController',
       action: 'create'

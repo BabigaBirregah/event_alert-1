@@ -35,5 +35,28 @@ module.exports = {
 				res.redirect('/type-alert/create');
 			}
 		});
+	}, 
+	destroy: function (req, res) {
+		var Model = actionUtil.parseModel(req);
+		var pk = actionUtil.requirePk(req);
+
+	    Model.destroy(pk).exec(function destroyedRecord (err, event) {
+			if (err) {
+				req.flash('type_flash_message', 'danger');
+				req.flash('flash_message', 'Une erreur est survenue');
+				res.redirect('organizer');
+			}
+			if (sails.hooks.pubsub) {
+		        Model.publishDestroy(pk, !sails.config.blueprints.mirror && req, {previous: event});
+		        if (req.isSocket) {
+		          	Model.unsubscribe(req, event);
+		          	Model.retire(event);
+		        }
+		  	}
+
+			req.flash('type_flash_message', 'info');
+			req.flash('flash_message', 'L\'événement a bien été supprimé');
+			res.redirect('organizer');
+		});
 	}
 };

@@ -29,8 +29,11 @@ var exports = module.exports = {
 
 		Event.find ({ organizer: req.session.user.id }).then (function (listEvent) { 
 			req.session.listEvent = listEvent;
-			
-			findTypesAlert(0);
+			if ( listEvent.length > 0 ) {
+				findTypesAlert(0);
+			} else {
+				render(req, res);
+			}
 		});
 	}
 	
