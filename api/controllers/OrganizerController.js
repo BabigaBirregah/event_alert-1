@@ -27,7 +27,7 @@ var exports = module.exports = {
 			});
 		};
 
-		Event.find ({ organizer: req.session.user.id }).then (function (listEvent) { 
+		Event.find ({ organizer: req.session.user.id }).where({state : {'>': 0}}).then (function (listEvent) { 
 			req.session.listEvent = listEvent;
 			if ( listEvent.length > 0 ) {
 				findTypesAlert(0);

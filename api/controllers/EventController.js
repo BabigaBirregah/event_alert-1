@@ -6,6 +6,7 @@
  */
 
 var actionUtil = require("../../node_modules/sails/lib/hooks/blueprints/actionUtil");
+var util = require('util');
 
 module.exports = {
 
@@ -40,21 +41,14 @@ module.exports = {
 		var Model = actionUtil.parseModel(req);
 		var pk = actionUtil.requirePk(req);
 
-	    Model.destroy(pk).exec(function destroyedRecord (err, event) {
+		Model.update({id: pk}, {state: 0}).exec(function updated(err, records) {
 			if (err) {
 				req.flash('type_flash_message', 'danger');
 				req.flash('flash_message', 'Une erreur est survenue');
 				res.redirect('organizer');
 			}
-			if (sails.hooks.pubsub) {
-		        Model.publishDestroy(pk, !sails.config.blueprints.mirror && req, {previous: event});
-		        if (req.isSocket) {
-		          	Model.unsubscribe(req, event);
-		          	Model.retire(event);
-		        }
-		  	}
 
-			req.flash('type_flash_message', 'info');
+		    req.flash('type_flash_message', 'info');
 			req.flash('flash_message', 'L\'événement a bien été supprimé');
 			res.redirect('organizer');
 		});
