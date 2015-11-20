@@ -35,7 +35,7 @@
 																<td><%- listEvent[i].title %></td>
 																<td><%- listEvent[i].description %></td>
 																<td><%=: listEvent[i].date | formatDate %></td>
-																<td><%- listEvent[i].place %></td>
+																<td class="place"><%- listEvent[i].place %></td>
 																<td>
 																	<ul>
 																		<% for(var j=0; j<listEvent[i].typesAlert.length; j++) {%>
@@ -60,3 +60,26 @@
 		</ul>
 	</li>
 </ul>
+<script type="text/javascript">
+	var geocoder;
+	$(function(){
+		geocoder = new google.maps.Geocoder();
+		var coordinates = document.getElementsByClassName("place");
+
+		for (var i=0; i<coordinates.length; i++) {
+            retrieveAddress(coordinates[i], coordinates[i].innerHTML);
+		}
+	});
+
+	function retrieveAddress(coordinate, input) {
+        var latlngStr = input.split(";",2);
+        var lat = parseFloat(latlngStr[0]);
+        var lng = parseFloat(latlngStr[1]);
+        var latlng = new google.maps.LatLng(lat, lng);
+        geocoder.geocode({'latLng': latlng}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK && results[0]) {
+                coordinate.innerHTML = results[0].formatted_address;
+            } 
+        });
+    }
+</script>
