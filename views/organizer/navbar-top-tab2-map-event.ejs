@@ -4,6 +4,20 @@
         <h3 class="panel-title">Evénements</h3>
     </div>
     <div id="map_view" style="width:870px;height:600px;"></div>
+	<% for(var i=0; i<listEvent.length; i++) {%>
+	   	<div class="event" hidden>
+			Titre : <%- listEvent[i].title %></br>
+			Description : <%- listEvent[i].description %></br>
+			Date : <%=: listEvent[i].date | formatDate %></br>
+			Type(s) d'alerte : 
+			<ul>
+				<% for(var j=0; j<listEvent[i].typesAlert.length; j++) {%>
+					<li><%- listEvent[i].typesAlert[j].name %></li>
+				<% } %>
+			</ul></br>
+	    	<a href="/event/destroy/<%- listEvent[i].id %>">supprimer</a>
+	   	</div>
+	<% } %>
 </div>
 <script type="text/javascript">
     var events = $(".event");
@@ -31,12 +45,13 @@
 
 		for (var i = 0; i < markersMapView.length; i++) {
 			var marker = markersMapView[i];
+			var event = events[i].innerHTML.replace("hidden", "");
 			google.maps.event.addListener(marker,'click', (function(marker,content,infowindow){ 
 			    return function() {
 			        infowindow.setContent(content);
 			        infowindow.open(map_view,marker);
 			    };
-			})(marker,events[i],infowindowsMapView[i]));  
+		})(marker,event,infowindowsMapView[i]));  
 		}
 	}
 
