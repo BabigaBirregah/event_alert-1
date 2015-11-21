@@ -1,0 +1,43 @@
+<ul class="nav navbar-nav">
+	<li class="dropdown mega-dropdown">
+		<a href="#" id="id_my_event_tab" class="dropdown-toggle" data-toggle="dropdown">Mes événements <b class="caret"></b></a>
+		
+		<ul class="dropdown-menu mega-dropdown-menu row">
+			<li class="col-sm-12">
+                <form class="form" role="form">
+					<div class="container-fluid">
+					    <section class="container">
+							<div class="container-page">				
+								<div class="col-md-12">
+									<h3 class="dropdown-header">Mes événements</h3>
+									<div id="list-events" class="container">
+									    <div class="well well-sm">
+									        <div class="btn-group">
+									            <a id="btn_list_view" href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-th-list">
+									            </span>List</a> <a href="#" id="btn_map_view" class="btn btn-default btn-sm"><span
+									                class="glyphicon glyphicon-map-marker"></span>Map</a>
+									        </div>
+									    </div>
+                    					<% include navbar-top-tab2-list-event.ejs %>
+										<% include navbar-top-tab2-map-event.ejs %>
+									</div>
+								</div>
+							</div>
+						</section>
+					</div>
+                </form>  
+			</li>
+		</ul>
+	</li>
+</ul>
+<script type="text/javascript">
+	$("#btn_list_view").click(function() {
+		$("#list_event").show();
+		$("#div_map_view").hide();
+	});
+
+	$("#btn_map_view").click(function() {
+		$("#div_map_view").show();
+		$("#list_event").hide();
+	});
+</script>
