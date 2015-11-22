@@ -1,29 +1,18 @@
 <!-- dependence : navbar-top-tab2-list-event.ejs -->
+<link rel="stylesheet" type="text/css" href="/styles/badge.css">
+
 <div id="div_map_view" class="panel panel-primary" hidden>
     <div class="panel-heading">
         <h3 class="panel-title">Evénements</h3>
     </div>
     <div id="map_view" style="width:870px;height:600px;"></div>
-	<% for(var i=0; i<listEvent.length; i++) {%>
-	   	<div class="event" hidden>
-			Titre : <%- listEvent[i].title %></br>
-			Description : <%- listEvent[i].description %></br>
-			Date : <%=: listEvent[i].date | formatDate %></br>
-			Type(s) d'alerte : 
-			<ul>
-				<% for(var j=0; j<listEvent[i].typesAlert.length; j++) {%>
-					<li><%- listEvent[i].typesAlert[j].name %></li>
-				<% } %>
-			</ul></br>
-	    	<a href="/event/destroy/<%- listEvent[i].id %>">supprimer</a>
-	   	</div>
-	<% } %>
 </div>
 <script type="text/javascript">
-    var events = $(".event");
+    var events = <%- JSON.stringify(listEvent) %>;
+
 	var map_view;
 	var markersMapView = [];
-	var infowindowsMapView = [];
+	var infowindow = new google.maps.InfoWindow();
 	var troyes = {lat: 48.2973451, lng: 4.0744009};
 
 	function initMapView() {
@@ -33,10 +22,9 @@
 		    mapTypeId: google.maps.MapTypeId.TERRAIN
 		});
 
-        var coordinates = $(".place");
 
-	    for (var i=0; i<coordinates.length; i++) {
-	    	var latlngStr = coordinates[i].id.split(";",2);
+	    for (var i=0; i<events.length; i++) {
+	    	var latlngStr = events[i].place.split(";",2);
 	    	var lat = parseFloat(latlngStr[0]);
 	    	var lng = parseFloat(latlngStr[1]);
 
@@ -45,21 +33,23 @@
 
 		for (var i = 0; i < markersMapView.length; i++) {
 			var marker = markersMapView[i];
-			var event = events[i].innerHTML.replace("hidden", "");
-			google.maps.event.addListener(marker,'click', (function(marker,content,infowindow){ 
+			google.maps.event.addListener(marker,'click', (function(marker,event){ 
 			    return function() {
-			        infowindow.setContent(content);
+			    	var typesAlertHtml = "<ul>";
+			    	for (var i in event.typesAlert) {
+			    		typesAlertHtml += "<li>"+event.typesAlert[i].name+"</li>"
+			    	}
+			    	typesAlertHtml += "</ul>";
+			    	var eventHtml = "<div class=\"offer offer-radius offer-primary\"><div class=\"shape\"><div class=\"shape-text\">Event</div></div><div id=\"event_content\" class=\"offer-content\">";
+			    	eventHtml += "<table class=\"table table-user-information\"><tbody><tr><td>Titre : </td><td>"+event.title+"</td></tr><tr><td>Description:</td><td>"+event.description+"</td></tr><tr><td>Date:</td><td>"+event.date+"</td></tr><tr><td>Type(s) d'alerte:</td><td>"+typesAlertHtml+"</td></tr><tr><td><a href=\"/event/destroy/"+event.id+"\">supprimer</a></td></tr></tbody></table></div>";
+			        infowindow.setContent(eventHtml);
 			        infowindow.open(map_view,marker);
 			    };
-			})(marker,event,infowindowsMapView[i]));  
+			})(marker,events[i]));  
 		}
 	}
 
 	function addMarkerMapView(location) {
-	    infowindowsMapView.push(
-	    	new google.maps.InfoWindow({
-			content: "holding..."
-		}));
 	  	marker = new google.maps.Marker({
 	    	position: location,
 	    	map: map_view
