@@ -1,5 +1,6 @@
 <link rel="stylesheet" type="text/css" href="/styles/jquery.datetimepicker.css"/>
 <link rel="stylesheet" type="text/css" href="/styles/material-switch.css"/>
+<link rel="stylesheet" type="text/css" href="/styles/badge.css">
 <ul class="nav navbar-nav">
 	<li class="dropdown mega-dropdown">
 		<a href="#" id="id_create_alert_tab" class="dropdown-toggle" data-toggle="dropdown">Alerter un incident <b class="caret"></b></a>
@@ -13,20 +14,36 @@
 								<div class="col-md-6">
 									<%- partial('flash-message-panel.ejs') %>
 									<h3 class="dropdown-header">Alerter un incident</h3>
-									
-									<div class="form-group col-lg-12">
-										<label>Date</label>
-										<input type="" name="date" class="form-control" id="datetimepicker_mask" value="">
+
+									<div class="container panel_event">
+										<div class="row">
+
+											<div class="col-md-5">
+												<div class="offer offer-radius offer-primary">
+													<div class="shape">
+														<div class="shape-text">
+															Event								
+														</div>
+													</div>
+													<div id="event_content" class="offer-content">
+									  					<table class="table table-user-information">
+									  						<tr><td>Veuillez sélectionner un événement..</td></tr>
+									  					</table>
+													</div>
+												</div>
+											</div>
+										</div>
 									</div>
 									
-									<div class="form-group col-lg-12">
+									<div class="form-group col-lg-12" hidden>
 										<label>Event</label>
-										<input type="text" name="event" class="form-control" id="" value="">
+										<input id="event" type="text" name="event" class="form-control" id="" value="">
 									</div>
 									
 									<div class="form-group col-lg-12">
 										<label>Type</label>
-										<input type="text" id="" name="type" class="form-control"/>
+										<select id="type" name="type" class="form-control"/>
+										</select>
 									</div>
 													
 									<div class="form-group col-lg-12">
@@ -45,7 +62,7 @@
 								<div class="col-md-6">
 									<h3 class="dark-grey">Localisation..</h3>
 
-									<div id="googleMap" style="width:460px;height:270px;"></div>
+									<div id="map" style="width:460px;height:270px;"></div>
 									<center style="margin-top:20px"><button type="submit" class="btn btn-primary">Valider <span class="glyphicon glyphicon-thumbs-up"></button></center>
 								</div>
 							</div>
@@ -63,36 +80,53 @@
 		$( "#id_create_alert_tab" ).trigger( "click" );		
 	});
 
-	/* Map */
+    var events = <%- JSON.stringify(listEvent) %>;
 	var map;
-	var myCenter=new google.maps.LatLng(51.508742,-0.120850);
+	var markersMap = [];
+	var troyes = {lat: 48.2973451, lng: 4.0744009};
 
-	function initialize() {
-	var mapProp = {
-	  	center:myCenter,
-	  	zoom:5,
-	  	mapTypeId:google.maps.MapTypeId.ROADMAP
-	  	};
+	function initMap() {
+		map = new google.maps.Map(document.getElementById('map'), {
+		    zoom: 8,
+		    center: troyes,
+		    mapTypeId: google.maps.MapTypeId.TERRAIN
+		});
 
-	  	map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+	    for (var i=0; i<events.length; i++) {
+	    	var latlngStr = events[i].place.split(";",2);
+	    	var lat = parseFloat(latlngStr[0]);
+	    	var lng = parseFloat(latlngStr[1]);
 
-	  	google.maps.event.addListener(map, 'click', function(event) {
-	    	placeMarker(event.latLng);
-	  	});
+	    	addMarker({lat: lat, lng: lng});
+	    }
+
+	    for (var i = 0; i < markersMap.length; i++) {
+			var marker = markersMap[i];
+			google.maps.event.addListener(marker,'click', (function(marker,event){ 
+			    return function() {
+			    	var typesAlertHtml = "";
+			    	for (var i in event.typesAlert) {
+			    		typesAlertHtml += "<option>"+event.typesAlert[i].name+"</option>"
+			    	}
+			   
+			    	var eventHtml = "<table class=\"table table-user-information\"><tbody><tr><td>Titre : </td><td>"+event.title+"</td></tr><tr><td>Description:</td><td>"+event.description+"</td></tr><tr><td>Date:</td><td>"+event.date+"</td></tr><tr hidden><td>Lieu:</td><td class=\"place\">"+event.place+"</td></tr></tbody></table>";
+			        $("#event_content").html(eventHtml);
+			        $("#event").val(event.id); 
+			        $("#type").html(typesAlertHtml); 
+			    };
+			})(marker,events[i]));  
+		}
 	}
 
-	function placeMarker(location) {
-	  	var marker = new google.maps.Marker({
+	function addMarker(location) {
+	  	marker = new google.maps.Marker({
 	    	position: location,
-	    	map: map,
+	    	map: map
 	  	});
-	  	var infowindow = new google.maps.InfoWindow({
-	    	content: 'Latitude: ' + location.lat() + '<br>Longitude: ' + location.lng()
-	  	});
-	  	infowindow.open(map,marker);
+		markersMap.push(marker);
 	}
 
-	google.maps.event.addDomListener(window, 'load', initialize);
+	google.maps.event.addDomListener(window, 'load', initMap);
 
 	/* Mask DateTimePicker */
 	$('#datetimepicker_mask').datetimepicker({
