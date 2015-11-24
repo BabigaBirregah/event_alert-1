@@ -23,7 +23,8 @@
 									                <thead>
 									                    <tr class="filters">
 									                        <th><input type="text" class="form-control" placeholder="Event" disabled></th>
-									                        <th><input type="text" class="form-control" placeholder="Type d'alerte" disabled></th><th><input type="text" class="form-control" placeholder="Auteur" disabled></th>
+									                        <th><input type="text" class="form-control" placeholder="Type d'alerte" disabled></th>
+									                        <th><input type="text" class="form-control" placeholder="Auteur" disabled></th>
 									                        <th><input type="text" class="form-control" placeholder="Details" disabled></th>
 									                        <th>Anonyme</th>
 									                    </tr>
@@ -36,7 +37,8 @@
 																<td><img src="/icon/edit_user.jpg"></img> <%- user.username %></td>
 																<td><%- listAlert[i].details %></td>
 																<td><%- listAlert[i].isAnonymous %></td>
-																<td><center><a href="/alert/destroy/<%- listAlert[i].id %>">supprimer</a></center></td>														   	</tr>
+																<td><center><a href="/alert/destroy/<%- listAlert[i].id %>">supprimer</a></center></td>
+															</tr>
 														<% } %>
 									                </tbody>
 									            </table>

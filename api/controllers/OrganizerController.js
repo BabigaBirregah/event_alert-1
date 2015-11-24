@@ -11,29 +11,47 @@ var exports = module.exports = {
 		var render = function(req, res) {
 			res.view('organizer/layout', {
 				user: req.session.user,
-				listEvent: req.session.listEvent
+				listEvent: req.session.listEvent,
+				users: req.session.users
 			});
 		};
 
 		var findTypesAlert = function(i) {
-			TypeAlert.find ({ event: req.session.listEvent[i].id }).then (function (typesAlert) {
+			TypeAlert.find({ event: req.session.listEvent[i].id }).then (function (typesAlert) {
 				req.session.listEvent[i]['typesAlert'] = typesAlert;
 				
 				if (i < req.session.listEvent.length-1) {
 					findTypesAlert(i+1);
+				} else {
+					findAlerts(0);
+				}
+			});
+		};		
+
+		var findAlerts = function(i) {
+			Alert.find({ event: req.session.listEvent[i].id }).then (function (alerts) {
+				req.session.listEvent[i]['alerts'] = alerts;
+				
+				if (i < req.session.listEvent.length-1) {
+					findAlerts(i+1);
 				} else {
 					render(req, res);
 				}
 			});
 		};
 
-		Event.find ({ organizer: req.session.user.id }).where({state : {'>': 0}}).then (function (listEvent) { 
-			req.session.listEvent = listEvent;
-			if ( listEvent.length > 0 ) {
-				findTypesAlert(0);
-			} else {
-				render(req, res);
-			}
+		User.find().then (function (users) { 
+			req.session.users = users;
+
+			Event.find({ organizer: req.session.user.id }).where({state : {'>': 0}}).then (function (listEvent) { 
+				req.session.listEvent = listEvent;
+
+				if ( listEvent.length > 0 ) {
+					findTypesAlert(0);
+				} else {
+					render(req, res);
+				}
+			});
 		});
 	}
 	
