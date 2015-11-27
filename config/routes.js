@@ -84,6 +84,16 @@ module.exports.routes = {
   'get /alert/destroy/:id': {
       controller: 'AlertController',
       action: 'destroy'
+  },  
+
+  '/scout/create': {
+      controller: 'ScoutController',
+      action: 'create'
+  },  
+
+  '/scout/destroy': {
+      controller: 'ScoutController',
+      action: 'destroy'
   },
 
   /***************************************************************************

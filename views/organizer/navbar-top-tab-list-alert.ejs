@@ -26,41 +26,50 @@
 									                        <th><input type="text" class="form-control" placeholder="Type" disabled></th>
 									                        <th><input type="text" class="form-control" placeholder="Auteur" disabled></th>
 									                        <th><input type="text" class="form-control" placeholder="Details" disabled></th>
-									                        <th>Anonyme</th>
 									                        <th style="width:200px">User access</th>
 									                    </tr>
 									                </thead>
 									                <tbody>
-
 														<% for(var i=0; i<listEvent.length; i++) {%>
 															<% for(var j=0; j<listEvent[i].alerts.length; j++) {%>
-
-															   	<tr>
+															   	<tr >
 																	<td><%- listEvent[i].title %></td>
 																	<td><%- listEvent[i].alerts[j].type %></td>
 																	<td>
-																		<% for(var k=0; k<users.length; k++) {
-																			if( users[k].id == listEvent[i].alerts[j].user ){%>
-																				<%- users[k].username %>
-																			<%}
-																		} %>
+																		<% if( listEvent[i].alerts[j].isAnonymous ){%>
+																			[Anonyme]
+																		<%}
+																		else {
+																			for(var k=0; k<users.length; k++) {
+																				if( users[k].id == listEvent[i].alerts[j].user ){%>
+																					<%- users[k].username %>
+																				<%}
+																			} 
+																		}%>
 																	</td>
 																	<td><%- listEvent[i].alerts[j].details %></td>
-																	<td><%- listEvent[i].alerts[j].isAnonymous %></td>
 																	<td>
-															            <div class="list well" style="max-height: 150px;overflow: auto;">
+																		<div class="list well" style="max-height: 150px;overflow: auto;">
 																			<div class="input-group">
-													                            <span class="input-group-addon glyphicon glyphicon-search"></span>
-													                            <input type="text" name="SearchList" class="form-control" placeholder="search" />
-													                        </div>
-															        		<ul class="list-group checked-list-box">
-															                  <li class="list-group-item" data-checked="true">jeanmichel</li>
-															                  <li class="list-group-item">jeremie</li>
-															                  <li class="list-group-item">maxime</li>
-															                  <li class="list-group-item">marie</li>
-															                  <li class="list-group-item">clement</li>
-															                </ul>
-															            </div>
+																		        <span class="input-group-addon glyphicon glyphicon-search"></span>
+																		        <input type="text" name="SearchList" class="form-control" placeholder="search" />
+																		    </div>
+																			<ul class="list-group checked-list-box">
+																				<% for(var l=0; l<users.length; l++) {
+																					if( users[l].id!=user.id && users[l].id != listEvent[i].alerts[j].user ){	
+																						var found = false; 
+																						if( listEvent[i].alerts[j].scouts ) {
+																							for (var m=0; m<listEvent[i].alerts[j].scouts.length; m++) {
+																								if ( users[l].id == listEvent[i].alerts[j].scouts[m].user ) {
+																									found = true;
+																								}
+																							}
+																						}%>
+																						<li id="<%-listEvent[i].alerts[j].id%> <%-users[l].id%>" class="user-access list-group-item" data-checked="<%-found%>"><%- users[l].username %></li>
+																		        	<%}
+																		        }%>
+																		    </ul>
+																		</div>
 										                        	</td>
 																</tr>
 															<% } %>
@@ -80,3 +89,26 @@
 	</li>
 </ul>
 <script src="/js/checked-list-group.js"></script>
+<script type="text/javascript">
+	$( ".user-access" ).click(function() {
+		var params = "alert="+this.id.split(" ")[0]+"&user="+this.id.split(" ")[1];
+		var url;
+
+		if ( $(this).attr("data-checked") == "true") {
+			$(this).attr("data-checked", "false");
+			url = "/scout/destroy";
+		} else {
+			$(this).attr("data-checked", "true");
+			url = "/scout/create";
+		}
+
+		$.ajax({
+			type: 'POST',
+	        url: url,
+			data: params,
+	        success: function(data) {
+	        	//     ...
+	        }
+	    });
+	});
+</script>
