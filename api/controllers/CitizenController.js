@@ -7,8 +7,6 @@
 
 module.exports = {
 	index: function (req, res) {
-
-
 		var findTypesAlert = function(i) {
 			TypeAlert.find ({ event: req.session.listEvent[i].id }).then (function (typesAlert) {
 				req.session.listEvent[i]['typesAlert'] = typesAlert;
@@ -17,11 +15,15 @@ module.exports = {
 					findTypesAlert(i+1);
 				} else {
 					Alert.find ({ user: req.session.user.id }).where({isDeleted : false}).then (function (listAlert) { 
-						res.view('citizen/layout', {
-							user: req.session.user,
-							listAlert: listAlert,
-							listEvent: req.session.listEvent
-						});
+						req.session.listAlert = listAlert;
+						Scout.query ('SELECT * FROM scout INNER JOIN alert WHERE scout.alert=alert.id AND scout.user='+req.session.user.id, function (err, listScout) { 
+							res.view('citizen/layout', {
+								user: req.session.user,
+								listAlert: req.session.listAlert,
+								listEvent: req.session.listEvent,
+								listScout: listScout
+							});
+						});	
 					});	
 				}
 			});

@@ -40,6 +40,14 @@
 																<td><center><a href="/alert/destroy/<%- listAlert[i].id %>">supprimer</a></center></td>
 															</tr>
 														<% } %>
+														<% for(var i=0; i<listScout.length; i++) {%>
+														   	<tr>
+																<td><%- listScout[i].event %></td>
+																<td><%- listScout[i].type %></td>
+																<td><img src="/icon/read_user.jpg"></img></td>
+																<td><%- listScout[i].details %></td>
+															</tr>
+														<% } %>
 									                </tbody>
 									            </table>
 									        </div>
