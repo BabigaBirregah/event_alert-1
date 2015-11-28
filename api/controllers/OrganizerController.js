@@ -29,28 +29,26 @@ var exports = module.exports = {
 		};		
 
 		var findScout = function(i, j) {
-			if ( req.session.listEvent[i]['alerts'][j] != undefined ) {
+			if (i == req.session.listEvent.length) {
+				render(req, res);
+			} else if ( req.session.listEvent[i]['alerts'].length > 0 && j<req.session.listEvent[i]['alerts'].length ) {
 				Scout.find({ alert: req.session.listEvent[i]['alerts'][j].id }).then (function (scouts) {
 					req.session.listEvent[i]['alerts'][j].scouts = scouts;
-					if (j < req.session.listEvent[i]['alerts'].length-1) {
-						findScout(j+1);
-					}
+						findScout(i, j+1);
 				});
+			} else {
+				findScout(i + 1, 0);
 			}
 		};
 
 		var findAlerts = function(i) {
 			Alert.find({ event: req.session.listEvent[i].id }).then (function (alerts) {
 				req.session.listEvent[i]['alerts'] = alerts;
-	
-				if ( req.session.listEvent[i]['alerts'].length > 0 ) {
-					findScout(i, 0);
-				}
 				
 				if (i < req.session.listEvent.length-1) {
 					findAlerts(i+1);
 				} else {
-					render(req, res);
+					findScout(0, 0);
 				}
 			});
 		};
