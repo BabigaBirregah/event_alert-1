@@ -66,6 +66,11 @@ module.exports.routes = {
       action: 'destroy'
   },
 
+  'post /event/tableEdit': {
+      controller: 'EventController',
+      action: 'tableEdit'
+  },
+
   '/type-alert/create': {
       controller: 'TypeAlertController',
       action: 'create'

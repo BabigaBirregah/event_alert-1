@@ -43,5 +43,26 @@ module.exports = {
 			req.flash('flash_message', 'L\'événement a bien été supprimé');
 			res.redirect('organizer');
 		});
-	}
+	},
+	update: function (req, res) {
+		var data = actionUtil.parseValues(req);
+		var Model = actionUtil.parseModel(req);
+
+		Model.update({id: data.id}, data).exec(function updated(err, records) {
+			if (err) {
+				req.flash('type_flash_message', 'danger');
+				req.flash('flash_message', 'Une erreur est survenue');
+				res.redirect('organizer');
+			}
+		});
+	},
+	tableEdit: function (req, res) {
+		var data = actionUtil.parseValues(req);
+
+		if ( data.action == 'edit' ) {
+			module.exports.update(req, res);
+		} else if ( data.action == 'delete' ) {
+			module.exports.destroy(req, res);
+		}
+	},
 };

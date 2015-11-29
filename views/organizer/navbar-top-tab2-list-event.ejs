@@ -1,4 +1,4 @@
- <div id="list_event" class="row">
+<div id="list_event" class="row">
     <div class="panel panel-primary filterable">
         <div class="panel-heading">
             <h3 class="panel-title">Evénements</h3>
@@ -6,7 +6,7 @@
                 <span class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</span>
             </div>
         </div>
-        <table class="table table-hover">
+        <table class="table table-hover table-striped table-bordered" id="table_event">
             <thead>
                 <tr class="filters">
                     <th><input type="text" class="form-control" placeholder="Titre" disabled></th>
@@ -14,35 +14,47 @@
                     <th><input type="text" class="form-control" placeholder="Date" disabled></th>
                     <th><input type="text" class="form-control" placeholder="Lieu" disabled></th>
                     <th>Type d'alerte</th>
+                    <th style="display:none">#</th>
+                    <th class="tabledit-toolbox-column"></th>
                 </tr>
             </thead>
             <tbody>
-				<% for(var i=0; i<listEvent.length; i++) {%>
-				   	<tr>
-						<td><%- listEvent[i].title %></td>
-						<td><%- listEvent[i].description %></td>
-						<td><%=: listEvent[i].date | formatDate %></td>
-						<td class="place"><%- listEvent[i].place %></td>
-						<td>
-							<ul>
-								<% for(var j=0; j<listEvent[i].typesAlert.length; j++) {%>
-									<li><%- listEvent[i].typesAlert[j].name %></li>
-								<% } %>
-							</ul>
-						</td>
-                    	<td><center><a href="/event/destroy/<%- listEvent[i].id %>">supprimer</a></center></td>
-				   	</tr>
-				<% } %>
+                <% for(var i=0; i<listEvent.length; i++) {%>
+                    <tr>
+                        <td class="tabledit-view-mode"><span class="tabledit-span"><%- listEvent[i].title %></span><input class="tabledit-input form-control input-sm" type="text" name="title" value="<%- listEvent[i].title %>" style="display: none;" disabled=""></td>
+
+                        <td class="tabledit-view-mode"><span class="tabledit-span"><%- listEvent[i].description %></span><input class="tabledit-input form-control input-sm" type="text" name="description" value="<%- listEvent[i].description %>" style="display: none;" disabled=""></td>
+
+                        <td class="tabledit-view-mode"><span class="tabledit-span"><%- listEvent[i].date %></span><input class="tabledit-input form-control input-sm" type="text" name="date" value="<%- listEvent[i].date %>" style="display: none;" disabled=""></td>
+
+                        <td class="place"><%- listEvent[i].place %></td>
+                        
+                        <td>
+                            <ul>
+                                <% for(var j=0; j<listEvent[i].typesAlert.length; j++) {%>
+                                    <li><%- listEvent[i].typesAlert[j].name %></li>
+                                <% } %>
+                            </ul>
+                        </td>
+
+                        <td scope="row" style="display:none"><%- listEvent[i].id %></td>
+
+                        <td style="white-space: nowrap; width: 1px;">
+                            <div class="tabledit-toolbox" style="margin-left: -5px; text-align: right;">
+                            </div>
+                        </td>
+                    </tr>
+                <% } %>
             </tbody>
         </table>
     </div>
 </div>
+
 <script type="text/javascript">
     var geocoder;
     $(function(){
         geocoder = new google.maps.Geocoder();
         var coordinates = document.getElementsByClassName("place");
-
         for (var i=0; i<coordinates.length; i++) {
             coordinates[i].id = coordinates[i].innerHTML;
             retrieveAddress(coordinates[i], coordinates[i].innerHTML);
@@ -60,4 +72,38 @@
             } 
         });
     }
+</script>
+<script src="/js/jquery.tabledit.js"></script>
+<script type="text/javascript">
+    $('#table_event').Tabledit({
+        url: '/event/tableEdit',
+        columns: {
+            identifier: [5, 'id'],
+            editable: [[0, 'title'],[1, 'description'],[2, 'date']]
+        },
+        buttons: {
+            edit: {
+                class: 'tabledit-edit-button btn btn-sm btn-warning',
+                html: '<span class="glyphicon glyphicon-edit"></span>',
+                action: 'edit'
+            },
+            delete: {
+                class:'tabledit-remove-button btn btn-sm btn-danger tabledit-confirm',
+                action: 'delete'
+            },
+            confirm: {
+                class: 'btn btn-sm btn-danger',
+                html: '<span class="glyphicon glyphicon-remove"></span> Supprimer'
+            },
+            restore: {
+                class: 'btn btn-sm btn-warning',
+                html: '<span class="glyphicon glyphicon-cloud-download"></span> Restaurer',
+                action: 'restore'
+            },
+            save: {
+                class: 'btn btn-sm btn-success',
+                html: '<span class="glyphicon glyphicon-ok"></span> Sauvegarder'
+            },
+        },
+    });
 </script>
