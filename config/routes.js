@@ -91,6 +91,11 @@ module.exports.routes = {
       action: 'destroy'
   },  
 
+  'post /alert/tableEdit': {
+      controller: 'AlertController',
+      action: 'tableEdit'
+  },
+
   '/scout/create': {
       controller: 'ScoutController',
       action: 'create'

@@ -19,7 +19,7 @@
 									                    <span class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</span>
 									                </div>
 									            </div>
-									            <table class="table table-hover">
+        										<table class="table table-hover table-striped table-bordered" id="table_alert">
 									                <thead>
 									                    <tr class="filters">
 									                        <th><input type="text" class="form-control" placeholder="Event" disabled></th>
@@ -27,6 +27,8 @@
 									                        <th><input type="text" class="form-control" placeholder="Auteur" disabled></th>
 									                        <th><input type="text" class="form-control" placeholder="Details" disabled></th>
 									                        <th>Anonyme</th>
+                    										<th style="display:none">#</th>
+									                        <th class="tabledit-toolbox-column"></th>
 									                    </tr>
 									                </thead>
 									                <tbody>
@@ -35,17 +37,24 @@
 																<td><%- listAlert[i].event %></td>
 																<td><%- listAlert[i].type %></td>
 																<td><img src="/icon/edit_user.jpg"></img> <%- user.username %></td>
-																<td><%- listAlert[i].details %></td>
+
+                        											<td class="tabledit-view-mode"><span class="tabledit-span"><%- listAlert[i].details %></span><input class="tabledit-input form-control input-sm" type="text" name="description" value="<%- listAlert[i].details %>" style="display: none;" disabled=""></td>
+
 																<td><%- listAlert[i].isAnonymous %></td>
-																<td><center><a href="/alert/destroy/<%- listAlert[i].id %>">supprimer</a></center></td>
+																<td scope="row" style="display:none"><%- listAlert[i].id %></td>
+
+										                        <td style="white-space: nowrap; width: 1px;">
+										                            <div class="tabledit-toolbox" style="margin-left: -5px; text-align: right;">
+										                            </div>
+										                        </td>
 															</tr>
 														<% } %>
 														<% for(var i=0; i<listScout.length; i++) {%>
-														   	<tr>
+														   	<tr class="scout">
 																<td><%- listScout[i].event %></td>
 																<td><%- listScout[i].type %></td>
 																<td><img src="/icon/read_user.jpg"></img></td>
-																<td><%- listScout[i].details %></td>
+																<td><%- listScout[i].details %></td>				
 															</tr>
 														<% } %>
 									                </tbody>
@@ -62,3 +71,37 @@
 		</ul>
 	</li>
 </ul>
+<script src="/js/jquery.tabledit.js"></script>
+<script type="text/javascript">
+    $('#table_alert').Tabledit({
+        url: '/alert/tableEdit',
+        columns: {
+            identifier: [5, 'id'],
+            editable: [[3, 'details']]
+        },
+        buttons: {
+            edit: {
+                class: 'tabledit-edit-button btn btn-sm btn-warning',
+                html: '<span class="glyphicon glyphicon-edit"></span>',
+                action: 'edit'
+            },
+            delete: {
+                class:'tabledit-remove-button btn btn-sm btn-danger tabledit-confirm',
+                action: 'delete'
+            },
+            confirm: {
+                class: 'btn btn-sm btn-danger',
+                html: '<span class="glyphicon glyphicon-remove"></span> Supprimer'
+            },
+            restore: {
+                class: 'btn btn-sm btn-warning',
+                html: '<span class="glyphicon glyphicon-cloud-download"></span> Restaurer',
+                action: 'restore'
+            },
+            save: {
+                class: 'btn btn-sm btn-success',
+                html: '<span class="glyphicon glyphicon-ok"></span> Sauvegarder'
+            },
+        },
+    });
+</script>
