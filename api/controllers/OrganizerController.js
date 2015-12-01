@@ -14,7 +14,8 @@ var exports = module.exports = {
 				listEvent: req.session.listEvent,
 				users: req.session.users,
 				listNotification: req.session.listNotification,
-				listNotificationSended: req.session.listNotificationSended
+				listNotificationSended: req.session.listNotificationSended,
+				numberNotifications: req.session.numberNotifications
 			});
 		};
 
@@ -75,6 +76,10 @@ var exports = module.exports = {
 
 		Notification.query ('SELECT * FROM notification INNER JOIN user WHERE user.id=notification.relatedUser AND notification.user='+req.session.user.id, function (err, listNotificationSended) { 
 			req.session.listNotificationSended = listNotificationSended;		
+		});
+
+		Notification.count().where({relatedUser: req.session.user.id, state: '1'}).exec(function countCB(error, numberNotifications) {
+			req.session.numberNotifications = numberNotifications;
 		});
 	}
 	
