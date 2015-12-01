@@ -1,0 +1,35 @@
+.table-inbox {
+    margin-top:20px;
+}
+.table-inbox tr {
+    background-color: #D8D8D8;
+}
+.table-inbox tr td {
+    padding: 5px !important;
+
+}
+.read .fa-tag {
+    color: #f78a09;
+}
+.fa-tag {
+    color: #d5d5d5;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: orange;
+}
+.table-inbox tr.unread td {
+    font-weight: 600;
+}
+#option_checkall {
+    height:33px;
+}
+#btn_remove {
+    text-decoration: none;
+    color: black;
+}
+.option {
+    border: 1px solid #A4A4A4;
+    border-radius: 5px !important;
+    background-color: #D8D8D8;
+    display: inline-block;
+    padding: 5px 10px;
+}

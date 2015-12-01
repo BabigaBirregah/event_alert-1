@@ -12,7 +12,9 @@ var exports = module.exports = {
 			res.view('organizer/layout', {
 				user: req.session.user,
 				listEvent: req.session.listEvent,
-				users: req.session.users
+				users: req.session.users,
+				listNotification: req.session.listNotification,
+				listNotificationSended: req.session.listNotificationSended
 			});
 		};
 
@@ -53,18 +55,25 @@ var exports = module.exports = {
 			});
 		};
 
+		Event.find({ organizer: req.session.user.id }).where({state : {'>': 0}}).then (function (listEvent) { 
+			req.session.listEvent = listEvent;
+
+			if ( listEvent.length > 0 ) {
+				findTypesAlert(0);
+			} else {
+				render(req, res);
+			}
+		});
+
 		User.find().then (function (users) { 
 			req.session.users = users;
+		});
+		Notification.query ('SELECT * FROM notification INNER JOIN user WHERE user.id=notification.user AND notification.relatedUser='+req.session.user.id, function (err, listNotification) { 
+			req.session.listNotification = listNotification;
+		});
 
-			Event.find({ organizer: req.session.user.id }).where({state : {'>': 0}}).then (function (listEvent) { 
-				req.session.listEvent = listEvent;
-
-				if ( listEvent.length > 0 ) {
-					findTypesAlert(0);
-				} else {
-					render(req, res);
-				}
-			});
+		Notification.find({ user: req.session.user.id }).then (function (listNotificationSended) { 
+			req.session.listNotificationSended = listNotificationSended;		
 		});
 	}
 	

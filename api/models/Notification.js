@@ -22,10 +22,11 @@ module.exports = {
             type: 'string',
             required: true
        	},
-       	isReaded : {
-            type: 'boolean',
-            defaultsTo: false
-       	},
+        state : { 
+            type: 'string',
+            defaultsTo: '1',
+            size: 1
+        }
   	}
 };
 

@@ -15,6 +15,9 @@ module.exports.http = {
       filters: {
           formatDate: function(date) { 
               return "["+date+"]";
+          },
+          formatDateSails: function(date) { 
+              return date.toString().replace("GMT+0100 (CET)", "");
           }
       }
   }
