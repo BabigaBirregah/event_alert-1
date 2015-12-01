@@ -1,12 +1,11 @@
-.table-inbox {
+.table-inbox, .table-sent-box {
     margin-top:20px;
 }
-.table-inbox tr {
+.table-inbox tr, .table-sent-box tr {
     background-color: #D8D8D8;
 }
-.table-inbox tr td {
+.table-inbox tr td, .table-sent-box tr td {
     padding: 5px !important;
-
 }
 .read .fa-tag {
     color: #f78a09;
@@ -19,7 +18,7 @@
 .table-inbox tr.unread td {
     font-weight: 600;
 }
-#option_checkall {
+#option_checkall, #option_checkall_sent {
     height:33px;
 }
 #btn_remove {
