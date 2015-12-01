@@ -106,6 +106,11 @@ module.exports.routes = {
       action: 'destroy'
   },
 
+  'post /notification/create': {
+      controller: 'NotificationController',
+      action: 'create'
+  },
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

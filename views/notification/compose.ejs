@@ -1,16 +1,55 @@
+<style type="text/css">
+a.link_label {
+        color: white; /*par exemple*/
+    }
+
+</style>
 <div class="tab-pane" id="compose">
     <div class="content-container clearfix">
         <div class="col-md-12">
-            <div class="form-group">
-                <input id="tokenfield" type="text" class="form-control" placeholder="To" />
+                <ul id="to" class="list-inline">
+                    <li>To : </li>
+                </ul>
+            <div class="list well" style="max-height: 300px;overflow: auto;">
+                <div class="input-group">
+                    <span class="input-group-addon glyphicon glyphicon-search"></span>
+                    <input type="text" name="SearchList" class="form-control" placeholder="Search" />
+                </div>
+                <ul class="list-group">
+                    <% for(var i=0; i<users.length; i++) {
+                        if( users[i].id!=user.id ){ %> 
+                            <li id="<%-users[i].id%>" class="user-access list-group-item" data-checked="false" style="padding: 0px 10px;">
+                                <div class="checkbox">
+                                    <label>
+                                        <input id="<%- users[i].username %>" class="user" type="checkbox" name="relatedUser" value="<%- users[i].id %>"><%- users[i].username %></input>
+                                    </label>
+                                </div>
+                            </li>
+                        <%}
+                    }%>
+                </ul>
             </div>
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Subject" />
+                <input type="text" name="user" class="form-control" placeholder="user" value="<%- user.id %>" style="display:none"/>
             </div>
-            <textarea class="form-control" placeholder="message"></textarea>
+            <div class="form-group">
+                <input type="text" name="subject" class="form-control" placeholder="Subject" />
+            </div>
+            <textarea name="content" class="form-control" placeholder="message"></textarea></br>
             <div class="btn-send">
-                <button class="btn btn-success btn-lg"><span class="glyphicon glyphicon-send"></span> Send</button>
+                <button type="submit" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-send"></span> Send</button>
             </div>
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $( ".user" ).click(function() {
+        if( $(this).is(':checked') ){
+            var label = $( "<li id=label_"+this.value+" class=\"label_user\"><a href=\"#\" style=\"text-decoration:none; color: white\"><span class=\"label label-primary\">"+this.id+"</span></a></li>" );
+            $( "#to" ).append(label);
+        } else {
+            $( "li" ).remove("#label_"+this.value);
+        }
+    });    
+</script>
