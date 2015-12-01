@@ -6,13 +6,73 @@
         <link href="/styles/background.css" rel="stylesheet">
         <link href="/styles/bootstrap.css" rel="stylesheet">
         <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'>
+        <link href="/styles/navbar-top.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="/styles/table-filters.css"/>
         <script src="/js/jquery.js"></script>
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js"></script>
     </head>
 
     <body>
-        <%- partial('../navbar-top.ejs', {type_user: 'organizer'}) %>
+        <div class="container">
+            <nav class="navbar navbar-default">
+                <div class="navbar-header">
+                    <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".js-navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Event Alert</a>
+                </div>
+                
+                <div class="collapse navbar-collapse js-navbar-collapse">
+                    <% include create-event.ejs %>
+                    <% include my-event.ejs %>
+                    <% include list-alert.ejs %>
+                    <% include notification.ejs %>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Compte
+                            <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <div class="navbar-content">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <img src="http://placehold.it/120x120"
+                                                    alt="Alternate Text" class="img-responsive" />
+                                                <p class="text-center small">
+                                                    <a href="#">Change Photo</a></p>
+                                            </div>
+                                            <div class="col-md-7">
+                                                <span><%- user.username %></span>
+                                                <p class="text-muted small">
+                                                    <%- user.email %></p>
+                                                <div class="divider">
+                                                </div>
+                                                <a href="#" class="btn btn-primary btn-sm active">View Profile</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="navbar-footer">
+                                        <div class="navbar-footer-content">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <a href="#" class="btn btn-default btn-sm">Change Password</a>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <a href="logout" class="btn btn-default btn-sm pull-right">Log Out</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
 
         <script src="/js/bootstrap.js"></script>
         <script src="http://mymaplist.com/js/vendor/TweenLite.min.js"></script>
