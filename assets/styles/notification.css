@@ -6,6 +6,7 @@
 }
 .table-inbox tr td, .table-sent-box tr td {
     padding: 5px !important;
+
 }
 .read .fa-tag {
     color: #f78a09;

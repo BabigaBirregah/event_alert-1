@@ -60,7 +60,7 @@ module.exports = {
 			req.session.listNotification = listNotification;
 		});
 
-		Notification.find({ user: req.session.user.id }).then (function (listNotificationSended) { 
+		Notification.query ('SELECT * FROM notification INNER JOIN user WHERE user.id=notification.relatedUser AND notification.user='+req.session.user.id, function (err, listNotificationSended) { 
 			req.session.listNotificationSended = listNotificationSended;		
 		});
 	}
