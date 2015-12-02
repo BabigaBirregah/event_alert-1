@@ -111,6 +111,11 @@ module.exports.routes = {
       action: 'create'
   },
 
+  'post /notification/updateState': {
+      controller: 'NotificationController',
+      action: 'updateState'
+  },
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

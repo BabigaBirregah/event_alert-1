@@ -70,7 +70,7 @@ var exports = module.exports = {
 			req.session.users = users;
 		});
 		
-		Notification.query ('SELECT * FROM notification INNER JOIN user WHERE user.id=notification.user AND notification.relatedUser='+req.session.user.id, function (err, listNotification) { 
+		Notification.query ('SELECT notification.id, notification.user, notification.relatedUser, notification.subject, notification.content, notification.state, notification.createdAt, user.username FROM notification INNER JOIN user WHERE user.id=notification.user AND notification.relatedUser='+req.session.user.id, function (err, listNotification) { 
 			req.session.listNotification = listNotification;
 		});
 

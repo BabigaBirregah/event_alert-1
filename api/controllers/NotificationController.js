@@ -24,5 +24,13 @@ module.exports = {
 			});
 		}
 	}, 
+
+	updateState: function (req, res) {
+		var Model = actionUtil.parseModel(req);
+		var data = actionUtil.parseValues(req);
+		
+		Model.update({id: data.id}, data).exec(function updated(err, records) {});
+		res.ok();
+	}, 
 };
 
