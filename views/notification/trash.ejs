@@ -1,56 +1,36 @@
-<div class="tab-pane" id="trash">
-    <ul class="list-group">
-        <li class="list-group-item">
-            <div class="row">
-                <div class="col-md-12">
-                    <div>
-                        <a href="#">Subject</a>
-                        <div class="mic-info">
-                            Par: <a href="#">Auteur</a> le <a href="#">Date</a>
-                        </div>
-                    </div>
-                    <div class="comment-text">
-                        Message
-                    </div>
-                    <div class="action">
-                        <button type="button" class="btn btn-primary btn-xs" title="Edit">
-                            <span class="glyphicon glyphicon-pencil"></span>
-                        </button>
-                        <button type="button" class="btn btn-success btn-xs" title="Approved">
-                            <span class="glyphicon glyphicon-ok"></span>
-                        </button>
-                        <button type="button" class="btn btn-danger btn-xs" title="Delete">
-                            <span class="glyphicon glyphicon-trash"></span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </li>                                        
-        <li class="list-group-item">
-            <div class="row">
-                <div class="col-md-12">
-                    <div>
-                        <a href="#">Subject</a>
-                        <div class="mic-info">
-                            Par: <a href="#">Auteur</a> le <a href="#">Date</a>
-                        </div>
-                    </div>
-                    <div class="comment-text">
-                        Message
-                    </div>
-                    <div class="action">
-                        <button type="button" class="btn btn-primary btn-xs" title="Edit">
-                            <span class="glyphicon glyphicon-pencil"></span>
-                        </button>
-                        <button type="button" class="btn btn-success btn-xs" title="Approved">
-                            <span class="glyphicon glyphicon-ok"></span>
-                        </button>
-                        <button type="button" class="btn btn-danger btn-xs" title="Delete">
-                            <span class="glyphicon glyphicon-trash"></span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </li>    
-    </ul>
+<div id="trash" class="tab-pane">
+    <div id="option_checkall_trash" class="option">
+        <label><input id="checkall_trash" type="checkbox"/> Tous</label>
+    </div>
+    <div class="option">
+        <a id="btn_remove_trash" href="#" class="glyphicon glyphicon-trash"></a>
+    </div>
+    <table id="table-trash-box" class="table table-trash-box table-bordered">
+        <tbody>
+        </tbody>
+    </table>
 </div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#option_checkall_trash").click(function () {
+            if ($("#checkall_trash").is(':checked')) {
+                $(".table-trash-box input[type=checkbox]").each(function () {
+                    $(this).prop("checked", true);
+                });
+            } else {
+                $(".table-trash-box input[type=checkbox]").each(function () {
+                    $(this).prop("checked", false);
+                });
+            }
+        });
+    });
+
+    $("#btn_remove_trash").click(function(){
+        $(".table-trash-box input[type=checkbox]").each(function () {
+            if ($(this).is(':checked')) {
+                var elem = $(this).parent().parent();
+                $(this).parent().parent().remove();
+            }
+        });
+    });
+</script>

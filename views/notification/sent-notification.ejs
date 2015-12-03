@@ -3,7 +3,7 @@
         <label><input id="checkall_sent" type="checkbox"/> Tous</label>
     </div>
     <div class="option">
-        <a id="btn_remove" href="#" class="glyphicon glyphicon-trash"></a>
+        <a id="btn_remove_sent" href="#" class="glyphicon glyphicon-trash"></a>
     </div>
     <table class="table table-sent-box table-bordered">
         <tbody>
@@ -30,6 +30,16 @@
                 $(".table-sent-box input[type=checkbox]").each(function () {
                     $(this).prop("checked", false);
                 });
+            }
+        });
+    });
+
+    $("#btn_remove_sent").click(function(){
+        $(".table-sent-box input[type=checkbox]").each(function () {
+            if ($(this).is(':checked')) {
+                var e = $(this).parent().parent();
+                $(this).parent().parent().remove();
+                $("#table-trash-box > tbody").append(e);               
             }
         });
     });

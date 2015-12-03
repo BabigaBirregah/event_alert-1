@@ -3,14 +3,15 @@
         <label><input id="checkall" type="checkbox"/> Tous</label>
     </div>
     <div class="option">
-        <a id="btn_remove" href="#" class="glyphicon glyphicon-trash"></a>
+        <a id="btn_remove_inbox" href="#" class="glyphicon glyphicon-trash"></a>
     </div>
     <table class="table table-inbox table-bordered">
         <tbody>
             <% for(var i=0; i<listNotification.length; i++) {
                 if( listNotification[i].state == '1' ) {%>
                     <tr id="<%- listNotification[i].id %>" class="unread">
-                <%} else {%>
+                <%} 
+                if( listNotification[i].state == '2' ){%>
                     <tr id="<%- listNotification[i].id %>" class="read">
                 <%}%>
                         <td><input type="checkbox"></td>
@@ -58,6 +59,16 @@
             type: 'POST',
             url: '/notification/updateState',
             data: params,
+        });
+    });
+
+    $("#btn_remove_inbox").click(function(){
+        $(".table-inbox input[type=checkbox]").each(function () {
+            if ($(this).is(':checked')) {
+                var e = $(this).parent().parent();
+                $(this).parent().parent().remove();
+                $("#table-trash-box > tbody").append(e);               
+            }
         });
     });
 </script>
