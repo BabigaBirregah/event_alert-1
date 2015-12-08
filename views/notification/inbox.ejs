@@ -8,12 +8,8 @@
     <table class="table table-inbox table-bordered">
         <tbody>
             <% for(var i=0; i<listNotification.length; i++) {
-                if( listNotification[i].state == '1' ) {%>
+                if( listNotification[i].receiverState == '1' ) {%>
                     <tr id="<%- listNotification[i].id %>" class="unread">
-                <%} 
-                if( listNotification[i].state == '2' ){%>
-                    <tr id="<%- listNotification[i].id %>" class="read">
-                <%}%>
                         <td><input type="checkbox"></td>
                         <td class="read_tag"><i class="fa fa-tag"></i></td>
                         <td><%- listNotification[i].username %></td>
@@ -21,6 +17,17 @@
                         <td><%- listNotification[i].content%></td>
                         <td class="text-right"><%=: listNotification[i].createdAt | formatDateSails %></td>
                     </tr>
+                <%} 
+                if( listNotification[i].receiverState == '2' ){%>
+                    <tr id="<%- listNotification[i].id %>" class="read">
+                        <td><input type="checkbox"></td>
+                        <td class="read_tag"><i class="fa fa-tag"></i></td>
+                        <td><%- listNotification[i].username %></td>
+                        <td><%- listNotification[i].subject%></td>
+                        <td><%- listNotification[i].content%></td>
+                        <td class="text-right"><%=: listNotification[i].createdAt | formatDateSails %></td>
+                    </tr>
+                <%}%>
             <%}%>
         </tbody>
     </table>
@@ -40,20 +47,20 @@
         });
     });
     $(".read_tag").click(function () {
-        var state = '0';
+        var receiverState = '0';
         if ( $(this).parent()[0].className == 'unread' ) {
             $(this).parent()[0].className = 'read';
-            state = '2';
+            receiverState = '2';
             $("#navbartop_number_notifications")[0].innerHTML = parseInt($("#navbartop_number_notifications")[0].innerHTML) - 1;
             $("#navbarleft_number_notifications")[0].innerHTML = parseInt($("#navbarleft_number_notifications")[0].innerHTML) - 1;
         } else {
             $(this).parent()[0].className = 'unread';
-            state = '1';
+            receiverState = '1';
             $("#navbartop_number_notifications")[0].innerHTML = parseInt($("#navbartop_number_notifications")[0].innerHTML) + 1;
             $("#navbarleft_number_notifications")[0].innerHTML = parseInt($("#navbarleft_number_notifications")[0].innerHTML) + 1;
         }
 
-        var params = "id="+$(this).parent()[0].id+"&state="+state;
+        var params = "id="+$(this).parent()[0].id+"&receiverState="+receiverState;
 
         $.ajax({
             type: 'POST',
@@ -67,7 +74,21 @@
             if ($(this).is(':checked')) {
                 var e = $(this).parent().parent();
                 $(this).parent().parent().remove();
-                $("#table-trash-box > tbody").append(e);               
+
+                if ( e[0].className == "unread" ) {
+                    $("#navbartop_number_notifications")[0].innerHTML = parseInt($("#navbartop_number_notifications")[0].innerHTML) - 1;
+                    $("#navbarleft_number_notifications")[0].innerHTML = parseInt($("#navbarleft_number_notifications")[0].innerHTML) - 1;
+                }
+                e.children().remove(".read_tag");
+                e.find(':checkbox').attr("checked", false);
+                $("#table-trash-box > tbody").append(e);  
+
+                var params = "id="+e[0].id+"&receiverState=3";
+                $.ajax({
+                    type: 'POST',
+                    url: '/notification/updateState',
+                    data: params,
+                });             
             }
         });
     });

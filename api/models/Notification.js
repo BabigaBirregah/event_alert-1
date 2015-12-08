@@ -22,7 +22,12 @@ module.exports = {
             type: 'string',
             required: true
        	},
-        state : { 
+        senderState : { 
+            type: 'string',
+            defaultsTo: '1',
+            size: 1
+        },
+        receiverState : { 
             type: 'string',
             defaultsTo: '1',
             size: 1

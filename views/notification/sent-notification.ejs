@@ -7,15 +7,17 @@
     </div>
     <table class="table table-sent-box table-bordered">
         <tbody>
-            <% for(var i=0; i<listNotificationSended.length; i++) {%>
-                <tr>
-                    <td><input type="checkbox"></td>
-                    <td><%- listNotificationSended[i].username %></td>
-                    <td><%- listNotificationSended[i].subject%></td>
-                    <td><%- listNotificationSended[i].content%></td>
-                    <td class="text-right"><%=: listNotificationSended[i].createdAt | formatDateSails %></td>
-                </tr>
-            <%}%>
+            <% for(var i=0; i<listNotificationSended.length; i++) {
+                if( listNotificationSended[i].senderState == '1' ) {%>
+                    <tr id="<%- listNotificationSended[i].id %>">
+                        <td><input type="checkbox"></td>
+                        <td class"username"><%- listNotificationSended[i].username %></td>
+                        <td><%- listNotificationSended[i].subject%></td>
+                        <td><%- listNotificationSended[i].content%></td>
+                        <td class="text-right"><%=: listNotificationSended[i].createdAt | formatDateSails %></td>
+                    </tr>
+                <%}   
+            }%>
         </tbody>
     </table>
 </div>
@@ -39,7 +41,17 @@
             if ($(this).is(':checked')) {
                 var e = $(this).parent().parent();
                 $(this).parent().parent().remove();
-                $("#table-trash-box > tbody").append(e);               
+                e.find(':checkbox').attr("checked", false);
+                e.children()[1].innerHTML = "<img src=\"/icon/edit_user.jpg\"></img>"+e.children()[1].innerHTML;
+                
+                $("#table-trash-box > tbody").append(e);   
+
+                var params = "id="+e[0].id+"&senderState=2";
+                $.ajax({
+                    type: 'POST',
+                    url: '/notification/updateState',
+                    data: params,
+                });                 
             }
         });
     });

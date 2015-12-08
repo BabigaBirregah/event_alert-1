@@ -70,15 +70,15 @@ var exports = module.exports = {
 			req.session.users = users;
 		});
 		
-		Notification.query ('SELECT notification.id, notification.user, notification.relatedUser, notification.subject, notification.content, notification.state, notification.createdAt, user.username FROM notification INNER JOIN user WHERE user.id=notification.user AND notification.relatedUser='+req.session.user.id, function (err, listNotification) { 
+		Notification.query ('SELECT notification.id, notification.user, notification.relatedUser, notification.subject, notification.content, notification.receiverState, notification.createdAt, user.username FROM notification INNER JOIN user WHERE user.id=notification.user AND notification.relatedUser='+req.session.user.id, function (err, listNotification) { 
 			req.session.listNotification = listNotification;
 		});
 
-		Notification.query ('SELECT * FROM notification INNER JOIN user WHERE user.id=notification.relatedUser AND notification.user='+req.session.user.id, function (err, listNotificationSended) { 
+		Notification.query ('SELECT notification.id, notification.subject, notification.content, notification.senderState, notification.createdAt, user.username FROM notification INNER JOIN user WHERE user.id=notification.relatedUser AND notification.user='+req.session.user.id, function (err, listNotificationSended) { 
 			req.session.listNotificationSended = listNotificationSended;		
 		});
 
-		Notification.count().where({relatedUser: req.session.user.id, state: '1'}).exec(function countCB(error, numberNotifications) {
+		Notification.count().where({relatedUser: req.session.user.id, receiverState: '1'}).exec(function countCB(error, numberNotifications) {
 			req.session.numberNotifications = numberNotifications;
 		});
 	}
