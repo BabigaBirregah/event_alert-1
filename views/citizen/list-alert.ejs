@@ -49,14 +49,16 @@
 										                        </td>
 															</tr>
 														<% } %>
-														<% for(var i=0; i<listScout.length; i++) {%>
-														   	<tr class="scout">
-																<td><%- listScout[i].event %></td>
-																<td><%- listScout[i].type %></td>
-																<td><img src="/icon/read_user.jpg"></img></td>
-																<td><%- listScout[i].details %></td>				
-															</tr>
-														<% } %>
+														<% if ( locals.listScout ) {
+															for(var i=0; i<listScout.length; i++) {%>
+															   	<tr class="scout">
+																	<td><%- listScout[i].event %></td>
+																	<td><%- listScout[i].type %></td>
+																	<td><img src="/icon/read_user.jpg"></img></td>
+																	<td><%- listScout[i].details %></td>				
+																</tr>
+															<% } 
+														}%>
 									                </tbody>
 									            </table>
 									        </div>
