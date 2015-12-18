@@ -50,6 +50,8 @@ module.exports = {
 						res.redirect('citizen');
 			          	} else if (user.type == 'o') {
 							res.redirect('organizer');
+			          	} else if (user.type == 'a') {
+							res.redirect('admin');
 			          	}
 			        }
 				});

@@ -116,6 +116,16 @@ module.exports.routes = {
       action: 'updateState'
   },
 
+  '/admin': {
+      controller: 'AdminController',
+      action: 'index'
+  },
+
+  '/admin/notifications': {
+      controller: 'AdminController',
+      action: 'notifications'
+  },
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

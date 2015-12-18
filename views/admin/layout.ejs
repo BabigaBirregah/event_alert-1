@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Admin</title>
+
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    	<link rel="stylesheet" type="text/css" href="/styles/admin.css">
+    	<link rel="stylesheet" type="text/css" href="/styles/morris.css">
+    </head>
+
+    <body>
+        <div id="wrapper">
+            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Admin</a>
+                </div>
+                <% include navbar-top.ejs %>
+                <% include navbar-left.ejs %>
+            </nav>
+            <% include dashboard/view.ejs %>
+        </div>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/js/admin/metisMenu.min.js"></script>
+        <script type="text/javascript" src="/js/admin/raphael-min.js"></script>
+        <script type="text/javascript" src="/js/admin/morris.min.js"></script>
+        <script type="text/javascript" src="/js/admin/morris-data.js"></script>
+        <script type="text/javascript" src="/js/admin/admin.js"></script>
+    </body>
+</html>

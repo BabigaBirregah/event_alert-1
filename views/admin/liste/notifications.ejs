@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Admin</title>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/styles/admin.css">
+    <link rel="stylesheet" type="text/css" href="/styles/morris.css">
+    <link rel="stylesheet" type="text/css" href="/styles/listes.css">
+</head>
+
+<body>
+    <div id="wrapper">
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Admin</a>
+            </div>
+            <% include ../navbar-top.ejs %>
+            <% include ../navbar-left.ejs %>
+        </nav>
+    <div id="page-wrapper">
+        <div class="container" style="margin-left:0px;">
+            <div class="row">
+                <h1 class="page-header">Messages</h1>
+            </div>
+            <div class="row">
+               <div class="container">
+                    <div class="row">
+                        <div class="panel panel-default widget">
+                            <div class="panel-heading">
+                                <span class="glyphicon glyphicon-comment"></span>
+                                <h3 class="panel-title">Du plus récent au plus ancien</h3>
+                                <span class="label label-info">5</span>
+                            </div>
+                            <div class="panel-body">
+                                <ul class="list-group">
+                                    <% include notification.ejs %>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</body>
+</html>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/admin/metisMenu.min.js"></script>
+<script type="text/javascript" src="/js/admin/admin.js"></script>
