@@ -7,29 +7,27 @@
     </div>
     <table id="table-trash-box" class="table table-trash-box table-bordered">
         <tbody>
-            <% if ( locals.listNotification ) {
-                for(var i=0; i<listNotification.length; i++) {
-                    if( listNotification[i].receiverState == '3') {%>
-                        <tr id="<%- listNotification[i].id %>">
-                            <td><input type="checkbox"></td>
-                            <td><%- listNotification[i].username %></td>
-                            <td><%- listNotification[i].subject%></td>
-                            <td><%- listNotification[i].content%></td>
-                            <td class="text-right"><%=: listNotification[i].createdAt | formatDateSails %></td>
-                        </tr>
-                    <%}
-                }
-                for(var i=0; i<listNotificationSended.length; i++) {
-                    if( listNotificationSended[i].senderState == '2') {%>
-                        <tr id="<%- listNotificationSended[i].id %>">
-                            <td><input type="checkbox"></td>
-                            <td><img src="/icon/edit_user.jpg"></img> <%- listNotificationSended[i].username %></td>
-                            <td><%- listNotificationSended[i].subject%></td>
-                            <td><%- listNotificationSended[i].content%></td>
-                            <td class="text-right"><%=: listNotificationSended[i].createdAt | formatDateSails %></td>
-                        </tr>
-                    <%}
-                }
+            <% for(var i=0; i<listNotification.length; i++) {
+                if( listNotification[i].receiverState == '3') {%>
+                    <tr id="<%- listNotification[i].id %>">
+                        <td><input type="checkbox"></td>
+                        <td><%- listNotification[i].username %></td>
+                        <td><%- listNotification[i].subject%></td>
+                        <td><%- listNotification[i].content%></td>
+                        <td class="text-right"><%=: listNotification[i].createdAt | formatDateSails %></td>
+                    </tr>
+                <%}
+            }
+            for(var i=0; i<listNotificationSended.length; i++) {
+                if( listNotificationSended[i].senderState == '2') {%>
+                    <tr id="<%- listNotificationSended[i].id %>">
+                        <td><input type="checkbox"></td>
+                        <td><img src="/icon/edit_user.jpg"></img> <%- listNotificationSended[i].username %></td>
+                        <td><%- listNotificationSended[i].subject%></td>
+                        <td><%- listNotificationSended[i].content%></td>
+                        <td class="text-right"><%=: listNotificationSended[i].createdAt | formatDateSails %></td>
+                    </tr>
+                <%}
             }%>
         </tbody>
     </table>

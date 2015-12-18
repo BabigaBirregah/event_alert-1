@@ -7,18 +7,16 @@
     </div>
     <table class="table table-sent-box table-bordered">
         <tbody>
-            <% if ( locals.listNotificationSended ) {
-                    for(var i=0; i<listNotificationSended.length; i++) {
-                    if( listNotificationSended[i].senderState == '1' ) {%>
-                        <tr id="<%- listNotificationSended[i].id %>">
-                            <td><input type="checkbox"></td>
-                            <td class"username"><%- listNotificationSended[i].username %></td>
-                            <td><%- listNotificationSended[i].subject%></td>
-                            <td><%- listNotificationSended[i].content%></td>
-                            <td class="text-right"><%=: listNotificationSended[i].createdAt | formatDateSails %></td>
-                        </tr>
-                    <%}   
-                }
+            <% for(var i=0; i<listNotificationSended.length; i++) {
+                if( listNotificationSended[i].senderState == '1' ) {%>
+                    <tr id="<%- listNotificationSended[i].id %>">
+                        <td><input type="checkbox"></td>
+                        <td class"username"><%- listNotificationSended[i].username %></td>
+                        <td><%- listNotificationSended[i].subject%></td>
+                        <td><%- listNotificationSended[i].content%></td>
+                        <td class="text-right"><%=: listNotificationSended[i].createdAt | formatDateSails %></td>
+                    </tr>
+                <%}   
             }%>
         </tbody>
     </table>

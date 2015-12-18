@@ -10,18 +10,16 @@
                     <input type="text" name="SearchList" class="form-control" placeholder="Search" />
                 </div>
                 <ul class="list-group">
-                    <% if ( locals.users ) {
-                            for(var i=0; i<users.length; i++) {
-                            if( users[i].id!=user.id ){ %> 
-                                <li id="<%-users[i].id%>" class="user-access list-group-item" data-checked="false" style="padding: 0px 10px;">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input id="<%- users[i].username %>" class="user" type="checkbox" name="relatedUser" value="<%- users[i].id %>"><%- users[i].username %></input>
-                                        </label>
-                                    </div>
-                                </li>
-                            <%}
-                        }
+                    <% for(var i=0; i<users.length; i++) {
+                        if( users[i].id!=user.id ){ %> 
+                            <li id="<%-users[i].id%>" class="user-access list-group-item" data-checked="false" style="padding: 0px 10px;">
+                                <div class="checkbox">
+                                    <label>
+                                        <input id="<%- users[i].username %>" class="user" type="checkbox" name="relatedUser" value="<%- users[i].id %>"><%- users[i].username %></input>
+                                    </label>
+                                </div>
+                            </li>
+                        <%}
                     }%>
                 </ul>
             </div>
