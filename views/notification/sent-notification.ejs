@@ -7,7 +7,7 @@
     </div>
     <table class="table table-sent-box table-bordered">
         <tbody>
-            <% if ( locals.listNotificationSended ) {
+            <% if ( listNotificationSended ) {
                     for(var i=0; i<listNotificationSended.length; i++) {
                     if( listNotificationSended[i].senderState == '1' ) {%>
                         <tr id="<%- listNotificationSended[i].id %>">

@@ -56,6 +56,10 @@ var exports = module.exports = {
 			});
 		};
 
+		User.find().then (function (users) { 
+			req.session.users = users;
+		});
+
 		Event.find({ organizer: req.session.user.id }).where({state : {'>': 0}}).then (function (listEvent) { 
 			req.session.listEvent = listEvent;
 
@@ -64,10 +68,6 @@ var exports = module.exports = {
 			} else {
 				render(req, res);
 			}
-		});
-
-		User.find().then (function (users) { 
-			req.session.users = users;
 		});
 		
 		Notification.query ('SELECT notification.id, notification.user, notification.relatedUser, notification.subject, notification.content, notification.receiverState, notification.createdAt, user.username FROM notification INNER JOIN user WHERE user.id=notification.user AND notification.relatedUser='+req.session.user.id, function (err, listNotification) { 
