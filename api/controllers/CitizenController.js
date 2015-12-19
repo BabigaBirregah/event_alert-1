@@ -38,21 +38,6 @@ module.exports = {
 			});
 		};
 
-		Event.find().where({state : {'>': 0}}).then (function (listEvent) { 
-			req.session.listEvent = listEvent;
-			if ( listEvent.length > 0 ) {
-				findTypesAlert(0);
-			} else {
-				Alert.find ({ user: req.session.user.id }).where({isDeleted : false}).then (function (listAlert) { 
-					res.view('citizen/layout', {
-						user: req.session.user,
-						listAlert: listAlert,
-						listEvent: req.session.listEvent
-					});
-				});			
-			}
-		});
-
 		User.find().then (function (users) { 
 			req.session.users = users;
 		});
@@ -67,6 +52,21 @@ module.exports = {
 
 		Notification.count().where({relatedUser: req.session.user.id, receiverState: '1'}).exec(function countCB(error, numberNotifications) {
 			req.session.numberNotifications = numberNotifications;
+		});
+
+		Event.find().where({state : {'>': 0}}).then (function (listEvent) { 
+			req.session.listEvent = listEvent;
+			if ( listEvent.length > 0 ) {
+				findTypesAlert(0);
+			} else {
+				Alert.find ({ user: req.session.user.id }).where({isDeleted : false}).then (function (listAlert) { 
+					res.view('citizen/layout', {
+						user: req.session.user,
+						listAlert: listAlert,
+						listEvent: req.session.listEvent
+					});
+				});			
+			}
 		});
 	}
 };

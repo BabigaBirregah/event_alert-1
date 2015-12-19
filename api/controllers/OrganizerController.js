@@ -60,16 +60,6 @@ var exports = module.exports = {
 			req.session.users = users;
 		});
 
-		Event.find({ organizer: req.session.user.id }).where({state : {'>': 0}}).then (function (listEvent) { 
-			req.session.listEvent = listEvent;
-
-			if ( listEvent.length > 0 ) {
-				findTypesAlert(0);
-			} else {
-				render(req, res);
-			}
-		});
-		
 		Notification.query ('SELECT notification.id, notification.user, notification.relatedUser, notification.subject, notification.content, notification.receiverState, notification.createdAt, user.username FROM notification INNER JOIN user WHERE user.id=notification.user AND notification.relatedUser='+req.session.user.id, function (err, listNotification) { 
 			req.session.listNotification = listNotification;
 		});
@@ -80,6 +70,16 @@ var exports = module.exports = {
 
 		Notification.count().where({relatedUser: req.session.user.id, receiverState: '1'}).exec(function countCB(error, numberNotifications) {
 			req.session.numberNotifications = numberNotifications;
+		});
+
+		Event.find({ organizer: req.session.user.id }).where({state : {'>': 0}}).then (function (listEvent) { 
+			req.session.listEvent = listEvent;
+
+			if ( listEvent.length > 0 ) {
+				findTypesAlert(0);
+			} else {
+				render(req, res);
+			}
 		});
 	}
 	
