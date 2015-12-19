@@ -48,28 +48,33 @@
 																		}%>
 																	</td>
 																	<td><%- listEvent[i].alerts[j].details %></td>
-																	<td>
-																		<div class="list well" style="max-height: 150px;overflow: auto;">
-																			<div class="input-group">
-																		        <span class="input-group-addon glyphicon glyphicon-search"></span>
-																		        <input type="text" name="SearchList" class="form-control" placeholder="search" />
-																		    </div>
-																			<ul class="list-group checked-list-box">
-																				<% for(var l=0; l<users.length; l++) {
-																					if( users[l].id!=user.id && users[l].id != listEvent[i].alerts[j].user ){	
-																						var found = false; 
-																						if( listEvent[i].alerts[j].scouts ) {
-																							for (var m=0; m<listEvent[i].alerts[j].scouts.length; m++) {
-																								if ( users[l].id == listEvent[i].alerts[j].scouts[m].user ) {
-																									found = true;
+																	<td> 
+																		<% if (listEvent[i].alerts[j].isDeleted == 0) {%>
+																			<div class="list well" style="max-height: 150px;overflow: auto;">
+																				<div class="input-group">
+																			        <span class="input-group-addon glyphicon glyphicon-search"></span>
+																			        <input type="text" name="SearchList" class="form-control" placeholder="search" />
+																			    </div>
+																				<ul class="list-group checked-list-box">
+																					<% for(var l=0; l<users.length; l++) {
+																						if( users[l].id!=user.id && users[l].id != listEvent[i].alerts[j].user ){	
+																							var found = false; 
+																							if( listEvent[i].alerts[j].scouts ) {
+																								for (var m=0; m<listEvent[i].alerts[j].scouts.length; m++) {
+																									if ( users[l].id == listEvent[i].alerts[j].scouts[m].user ) {
+																										found = true;
+																									}
 																								}
-																							}
-																						}%>
-																						<li id="<%-listEvent[i].alerts[j].id%> <%-users[l].id%>" class="user-access list-group-item" data-checked="<%-found%>"><%- users[l].username %></li>
-																		        	<%}
-																		        }%>
-																		    </ul>
-																		</div>
+																							}%>
+																							<li id="<%-listEvent[i].alerts[j].id%> <%-users[l].id%>" class="user-access list-group-item" data-checked="<%-found%>"><%- users[l].username %></li>
+																			        	<%}
+																			        }%>
+																			    </ul>
+																			</div>
+																		<%} else {%>
+																		<img src="/icon/deleted.png"></img>
+																			[Alerte supprimé]
+																		<%}%>
 										                        	</td>
 																</tr>
 															<% } %>
