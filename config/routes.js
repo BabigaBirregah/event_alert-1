@@ -126,6 +126,11 @@ module.exports.routes = {
       action: 'notifications'
   },
 
+  '/admin/my-notifications': {
+      controller: 'AdminController',
+      action: 'myNotifications'
+  },
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

@@ -1,42 +1,24 @@
- <li>
-    <a href="#">
-        <div>
-            <strong>Jean-Michel</strong>
-            <span class="pull-right text-muted">
-                <em>Yesterday</em>
-            </span>
-        </div>
-        <div>Test</div>
-    </a>
-</li>
-<li class="divider"></li>
-<li>
-    <a href="#">
-        <div>
-            <strong>Isabelle</strong>
-            <span class="pull-right text-muted">
-                <em>Yesterday</em>
-            </span>
-        </div>
-        <div>Test</div>
-    </a>
-</li>
-<li class="divider"></li>
-<li>
-    <a href="#">
-        <div>
-            <strong>Mario</strong>
-            <span class="pull-right text-muted">
-                <em>Yesterday</em>
-            </span>
-        </div>
-        <div>Test</div>
-    </a>
-</li>
-<li class="divider"></li>
-<li>
-    <a class="text-center" href="#">
-        <strong>Voir tout les messages</strong>
-        <i class="fa fa-angle-right"></i>
-    </a>
-</li>
+<% if (myNotifications) {
+    var numberNotificationToView = myNotifications.length;
+    if ( numberNotificationToView > 3 )
+        numberNotificationToView = 3;
+    for(var i=0; i<numberNotificationToView; i++) { %>
+        <li>
+            <a href="#">
+                <div>
+                    <strong><%- myNotifications[i].username %></strong>
+                    <span class="pull-right text-muted"><em><%=: myNotifications[i].createdAt | formatDateSails %></em></span>
+                </div>
+                <em><div><%- myNotifications[i].subject%></div></em>
+                <div><%- myNotifications[i].content%></div>
+            </a>
+        </li>
+        <li class="divider"></li>  
+    <%}%>
+    <li>
+        <a class="text-center" href="/admin/my-notifications">
+            <strong>Voir tout les messages</strong>
+            <i class="fa fa-angle-right"></i>
+        </a>
+    </li>
+<%}%>

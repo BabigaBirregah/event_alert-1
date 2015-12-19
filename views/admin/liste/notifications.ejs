@@ -24,24 +24,51 @@
             <% include ../navbar-top.ejs %>
             <% include ../navbar-left.ejs %>
         </nav>
-    <div id="page-wrapper">
-        <div class="container" style="margin-left:0px;">
-            <div class="row">
-                <h1 class="page-header">Messages</h1>
-            </div>
-            <div class="row">
-               <div class="container">
-                    <div class="row">
-                        <div class="panel panel-default widget">
-                            <div class="panel-heading">
-                                <span class="glyphicon glyphicon-comment"></span>
-                                <h3 class="panel-title">Du plus récent au plus ancien</h3>
-                                <span class="label label-info">5</span>
-                            </div>
-                            <div class="panel-body">
-                                <ul class="list-group">
-                                    <% include notification.ejs %>
-                                </ul>
+        <div id="page-wrapper">
+            <div class="container" style="margin-left:0px;">
+                <div class="row">
+                    <% if ( typeNotifications == 'myNotifications' ) { %>
+                        <h1 class="page-header">Mes messages</h1>
+                    <%} else { %>
+                        <h1 class="page-header">Messages</h1>
+                    <%}%>
+                </div>
+                <div class="row">
+                   <div class="container">
+                        <div class="row">
+                            <div class="panel panel-default widget">
+                                <div class="panel-heading">
+                                    <span class="glyphicon glyphicon-comment"></span>
+                                    <h3 class="panel-title">Du plus récent au plus ancien</h3>
+                                    <span class="label label-info"><%- listNotification.length%></span>
+                                </div>
+                                <div class="panel-body">
+                                    <ul class="list-group">
+                                        <% for(var i=0; i<listNotification.length; i++) { %>
+                                             <li class="list-group-item">
+                                                <div class="row">
+                                                    <div class="col-xs-10 col-md-12">
+                                                        <div>
+                                                            <div class="mic-info">
+                                                                De: <a href="#"><%- listNotification[i].username %></a>
+                                                                <% if ( typeNotifications == 'notifications' ) { %>
+                                                                    à <a href="#"><%- listNotification[i].relatedUsername %></a>
+                                                                <%}%>
+                                                                 le <%=: listNotification[i].createdAt | formatDateSails %>
+                                                            </div>
+                                                        </div>
+                                                        <div class="comment-text">
+                                                            <em><%- listNotification[i].subject%></em>
+                                                        </div>
+                                                        <div class="comment-text">
+                                                            <%- listNotification[i].content%>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        <%}%>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -49,8 +76,6 @@
             </div>
         </div>
     </div>
-    </div>
-
 </body>
 </html>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
