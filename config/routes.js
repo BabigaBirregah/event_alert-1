@@ -156,6 +156,11 @@ module.exports.routes = {
       action: 'update'
   },
 
+  '/statistic/alerts': {
+      controller: 'StatisticController',
+      action: 'alerts'
+  },
+
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *

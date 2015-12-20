@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Admin</title>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/styles/admin.css">
+    <link rel="stylesheet" type="text/css" href="/styles/table-filters.css"/>
+</head>
+
+<body>
+    <div id="wrapper">
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Admin</a>
+            </div>
+            <% include ../navbar-top.ejs %>
+            <% include ../navbar-left.ejs %>
+        </nav>
+        <div id="page-wrapper">
+            <div class="container" style="margin-left:0px;">
+                <div class="row">
+                    <h1 class="page-header">Alertes</h1>
+                </div>
+                <div class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bar-chart-o fa-fw"></i> Statistiques de la dernière semaine
+                            <div class="pull-right">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                        Actions
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right" role="menu">
+                                        <li><a href="#">de la dernière semaine</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div id="morris-area-chart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/raphael-min.js"></script>
+<script type="text/javascript" src="/js/morris.min.js"></script>
+<script type="text/javascript" src="/js/metisMenu.min.js"></script>
+<script type="text/javascript" src="/js/admin.js"></script>
+<script src="/js/table-filters.js"></script>
+<script type="text/javascript">
+    $(function() {
+        Morris.Area(<%- JSON.stringify(dataChart) %>);
+    });
+</script>
