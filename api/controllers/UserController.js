@@ -62,6 +62,20 @@ module.exports = {
 	logout: function (req, res) {
 		req.session.destroy();
 		res.redirect('/');
-	}
+	},
+
+	update: function (req, res) {
+		var data = actionUtil.parseValues(req);
+		var Model = actionUtil.parseModel(req);
+
+		Model.update({id: data.id}, data).exec(function updated(err, records) {
+			if (err) {
+				req.flash('type_flash_message', 'danger');
+				req.flash('flash_message', 'Une erreur est survenue');
+				res.redirect('admin');
+			}
+			res.ok();
+		});
+	},
 	
 };

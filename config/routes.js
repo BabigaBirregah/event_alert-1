@@ -144,6 +144,16 @@ module.exports.routes = {
   '/admin/alerts': {
       controller: 'AdminController',
       action: 'alerts'
+  },  
+
+  '/admin/users/right': {
+      controller: 'AdminController',
+      action: 'usersRight'
+  },
+
+  '/user/update': {
+      controller: 'UserController',
+      action: 'update'
   },
 
   /***************************************************************************

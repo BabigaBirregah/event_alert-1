@@ -136,6 +136,15 @@ module.exports = {
 		});
 	},
 
+	usersRight: function (req, res) {
+		User.find().then (function (users) { 
+			res.view('admin/users/right', {
+				users: users,
+				myNotifications: req.session.myNotifications,
+			});
+		});
+
+	}
 };
 
 	
