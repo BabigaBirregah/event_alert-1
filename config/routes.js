@@ -139,6 +139,11 @@ module.exports.routes = {
   '/admin/events': {
       controller: 'AdminController',
       action: 'events'
+  },  
+
+  '/admin/alerts': {
+      controller: 'AdminController',
+      action: 'alerts'
   },
 
   /***************************************************************************

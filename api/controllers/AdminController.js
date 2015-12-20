@@ -12,10 +12,14 @@ module.exports = {
 			req.session.myNotifications = myNotifications;
 			Notification.count().exec(function countCB(error, numberNotifications) {
 				Event.count().exec(function countCB(error, numberEvents) {
-					res.view('admin/layout', {
-						myNotifications: req.session.myNotifications,
-						numberNotifications: numberNotifications,
-						numberEvents: numberEvents
+					req.session.numberEvents = numberEvents;
+					Alert.count().exec(function countCB(error, numberAlerts) {
+						res.view('admin/layout', {
+							myNotifications: req.session.myNotifications,
+							numberNotifications: numberNotifications,
+							numberEvents: req.session.numberEvents,
+							numberAlerts: numberAlerts
+						});
 					});
 				});
 			});
@@ -59,6 +63,67 @@ module.exports = {
 				}
 			});
 		};		
+
+		Event.find().then (function (listEvents) {
+			req.session.listEvents = listEvents;
+
+			if ( listEvents.length > 0 ) {
+				findTypesAlert(0);
+			} else {
+				render(req, res);
+			}
+		});
+	},
+
+	alerts: function(req, res) {
+		var render = function (req, res) {
+			res.view('admin/table/alerts', {
+				user: req.session.user,
+				myNotifications: req.session.myNotifications,
+				listEvents: req.session.listEvents,
+				users: req.session.users,
+			});
+		}
+
+		var findScout = function(i, j) {
+			if (i == req.session.listEvents.length) {
+				render(req, res);
+			} else if ( req.session.listEvents[i]['alerts'].length > 0 && j<req.session.listEvents[i]['alerts'].length ) {
+				Scout.find({ alert: req.session.listEvents[i]['alerts'][j].id }).then (function (scouts) {
+					req.session.listEvents[i]['alerts'][j].scouts = scouts;
+						findScout(i, j+1);
+				});
+			} else {
+				findScout(i + 1, 0);
+			}
+		};
+
+		var findAlerts = function(i) {
+			Alert.find({ event: req.session.listEvents[i].id }).then (function (alerts) {
+				req.session.listEvents[i]['alerts'] = alerts;
+				
+				if (i < req.session.listEvents.length-1) {
+					findAlerts(i+1);
+				} else {
+					findScout(0, 0);
+				}
+			});
+		};
+		var findTypesAlert = function(i) {
+			TypeAlert.find({ event: req.session.listEvents[i].id }).then (function (typesAlert) {
+				req.session.listEvents[i]['typesAlert'] = typesAlert;
+				
+				if (i < req.session.listEvents.length-1) {
+					findTypesAlert(i+1);
+				} else {
+					findAlerts(0);
+				}
+			});
+		};	
+
+		User.find().then (function (users) { 
+			req.session.users = users;
+		});
 
 		Event.find().then (function (listEvents) {
 			req.session.listEvents = listEvents;
