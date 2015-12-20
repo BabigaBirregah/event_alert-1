@@ -59,6 +59,11 @@ module.exports.routes = {
   'post /event/create': {
       controller: 'EventController',
       action: 'create'
+  },  
+
+  'post /event/update': {
+      controller: 'EventController',
+      action: 'update'
   },
 
   'get /event/destroy/:id': {
@@ -129,6 +134,11 @@ module.exports.routes = {
   '/admin/my-notifications': {
       controller: 'AdminController',
       action: 'myNotifications'
+  },  
+
+  '/admin/events': {
+      controller: 'AdminController',
+      action: 'events'
   },
 
   /***************************************************************************

@@ -7,7 +7,7 @@
     </div>
     <table id="table-trash-box" class="table table-trash-box table-bordered">
         <tbody>
-            <% if ( listNotification ) {
+            <% if ( locals.listNotification ) {
                 for(var i=0; i<listNotification.length; i++) {
                     if( listNotification[i].receiverState == '3') {%>
                         <tr id="<%- listNotification[i].id %>">

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Admin</title>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/styles/admin.css">
+    <link rel="stylesheet" type="text/css" href="/styles/table-filters.css"/>
+</head>
+
+<body>
+    <div id="wrapper">
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Admin</a>
+            </div>
+            <% include ../navbar-top.ejs %>
+            <% include ../navbar-left.ejs %>
+        </nav>
+        <div id="page-wrapper">
+            <div class="container" style="margin-left:0px;">
+                <div class="row">
+                    <h1 class="page-header">Evénements</h1>
+                </div>
+                <div id="list_event" class="row">
+                    <div class="panel panel-primary filterable">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Evénements</h3>
+                            <div class="pull-right">
+                                <span class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</span>
+                            </div>
+                        </div>
+                        <table class="table table-hover table-striped table-bordered" id="table_event">
+                            <thead>
+                                <tr class="filters">
+                                    <th><input type="text" class="form-control" placeholder="Titre" disabled></th>
+                                    <th><input type="text" class="form-control" placeholder="Description" disabled></th>
+                                    <th><input type="text" class="form-control" placeholder="Date" disabled></th>
+                                    <th><input type="text" class="form-control" placeholder="Lieu" disabled></th>
+                                    <th>Type d'alerte</th>
+                                    <th>Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% for(var i=0; i<listEvents.length; i++) {%>
+                                    <tr>
+                                        <td><%- listEvents[i].title %></td>
+
+                                        <td><%- listEvents[i].description %></td>
+
+                                        <td><%- listEvents[i].date %></td>
+
+                                        <td class="place"><%- listEvents[i].place %></td>
+                                        
+                                        <td>
+                                            <ul>
+                                                <% for(var j=0; j<listEvents[i].typesAlert.length; j++) {%>
+                                                    <li><%- listEvents[i].typesAlert[j].name %></li>
+                                                <% } %>
+                                            </ul>
+                                        </td>
+
+                                        <td id="<%- listEvents[i].id %>" style="width:135px">
+                                            <% 
+                                            if (listEvents[i].state == 0) {%>
+                                                <span class="label label-danger">Supprimé</span>
+                                            <%} 
+
+                                            if (listEvents[i].state == 1) {%>
+                                                <span class="label label-warning">A valider</span>
+                                                <button type="button" class="btn btn-event btn-success btn-xs" title="approved">
+                                                    <span class="glyphicon glyphicon-ok"></span>
+                                                </button>
+                                                <button type="button" class="btn btn-event btn-danger btn-xs" title="deleted">
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                </button>
+                                            <%}
+
+                                            if (listEvents[i].state == 2) {%>
+                                                <span class="label label-success">Validé</span>
+                                                <button type="button" class="btn btn-event btn-danger btn-xs" title="deleted">
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                </button>
+                                            <%}%>
+                                        </td>
+                                    </tr>
+                                <%}%>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/admin/metisMenu.min.js"></script>
+<script type="text/javascript" src="/js/admin/admin.js"></script>
+<script src="/js/table-filters.js"></script>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js"></script>
+<script type="text/javascript">
+    var geocoder;
+    $(function(){
+        geocoder = new google.maps.Geocoder();
+        var coordinates = document.getElementsByClassName("place");
+        for (var i=0; i<coordinates.length; i++) {
+            coordinates[i].id = coordinates[i].innerHTML;
+            retrieveAddress(coordinates[i], coordinates[i].innerHTML);
+        }
+    });
+
+    function retrieveAddress(coordinate, input) {
+        var latlngStr = input.split(";",2);
+        var lat = parseFloat(latlngStr[0]);
+        var lng = parseFloat(latlngStr[1]);
+        var latlng = new google.maps.LatLng(lat, lng);
+        geocoder.geocode({'latLng': latlng}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK && results[0]) {
+                coordinate.innerHTML = results[0].formatted_address;
+            } 
+        });
+    }
+
+    $( ".btn-event" ).click(function() {
+        if ( $(this).attr("title") == 'approved' ) {
+            var params = "id="+$(this).parent()[0].id+"&state=2";
+            $.ajax({
+                type: 'POST',
+                url: '/event/update',
+                data: params,
+            });
+            $(this).parent()[0].innerHTML = '<span class="label label-success">Validé</span><button type="button" class="btn btn-event btn-danger btn-xs" title="deleted"><span class="glyphicon glyphicon-trash"></span></button>';
+        } else if ( $(this).attr("title") == 'deleted' ){
+            var params = "id="+$(this).parent()[0].id;
+            $.ajax({
+                type: 'POST',
+                url: '/event/destroy',
+                data: params,
+            });
+            $(this).parent()[0].innerHTML = '<span class="label label-danger">Supprimé</span>';
+        }
+    });
+</script>

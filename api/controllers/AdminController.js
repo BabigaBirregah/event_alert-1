@@ -11,9 +11,12 @@ module.exports = {
 		Notification.query ('SELECT notification.id, notification.user, notification.relatedUser, notification.subject, notification.content, notification.receiverState, notification.createdAt, user.username FROM notification INNER JOIN user WHERE user.id=notification.user AND notification.relatedUser='+req.session.user.id+' ORDER BY createdAt DESC', function (err, myNotifications) { 
 			req.session.myNotifications = myNotifications;
 			Notification.count().exec(function countCB(error, numberNotifications) {
-				res.view('admin/layout', {
-					myNotifications: req.session.myNotifications,
-					numberNotifications: numberNotifications
+				Event.count().exec(function countCB(error, numberEvents) {
+					res.view('admin/layout', {
+						myNotifications: req.session.myNotifications,
+						numberNotifications: numberNotifications,
+						numberEvents: numberEvents
+					});
 				});
 			});
 		});
@@ -34,6 +37,37 @@ module.exports = {
 			typeNotifications: 'myNotifications',
 			myNotifications: req.session.myNotifications,
 			listNotification: req.session.myNotifications
+		});
+	},	
+
+	events: function(req, res) {
+		var render = function (req, res) {
+			res.view('admin/table/events', {
+				myNotifications: req.session.myNotifications,
+				listEvents: req.session.listEvents
+			});
+		}
+
+		var findTypesAlert = function(i) {
+			TypeAlert.find({ event: req.session.listEvents[i].id }).then (function (typesAlert) {
+				req.session.listEvents[i]['typesAlert'] = typesAlert;
+				
+				if (i < req.session.listEvents.length-1) {
+					findTypesAlert(i+1);
+				} else {
+					render(req, res);
+				}
+			});
+		};		
+
+		Event.find().then (function (listEvents) {
+			req.session.listEvents = listEvents;
+
+			if ( listEvents.length > 0 ) {
+				findTypesAlert(0);
+			} else {
+				render(req, res);
+			}
 		});
 	},
 

@@ -14,6 +14,7 @@
                     <th><input type="text" class="form-control" placeholder="Date" disabled></th>
                     <th><input type="text" class="form-control" placeholder="Lieu" disabled></th>
                     <th>Type d'alerte</th>
+                    <th>Statut</th>
                     <th style="display:none">#</th>
                     <th class="tabledit-toolbox-column"></th>
                 </tr>
@@ -37,6 +38,15 @@
                             </ul>
                         </td>
 
+                        <td>
+                            <% 
+                            if (listEvent[i].state == 1) {%>
+                                <span class="label label-warning">En cours</span>
+                            <%}
+                            if (listEvent[i].state == 2) {%>
+                                <span class="label label-success">Validé</span>
+                            <%}%>
+                        </td>
                         <td scope="row" style="display:none"><%- listEvent[i].id %></td>
 
                         <td style="white-space: nowrap; width: 1px;">
@@ -78,7 +88,7 @@
     $('#table_event').Tabledit({
         url: '/event/tableEdit',
         columns: {
-            identifier: [5, 'id'],
+            identifier: [6, 'id'],
             editable: [[0, 'title'],[1, 'description'],[2, 'date']]
         },
         buttons: {

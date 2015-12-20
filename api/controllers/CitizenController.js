@@ -54,7 +54,7 @@ module.exports = {
 			req.session.numberNotifications = numberNotifications;
 		});
 
-		Event.find().where({state : {'>': 0}}).then (function (listEvent) { 
+		Event.find().where({state : {'>': 1}}).then (function (listEvent) { 
 			req.session.listEvent = listEvent;
 			if ( listEvent.length > 0 ) {
 				findTypesAlert(0);
