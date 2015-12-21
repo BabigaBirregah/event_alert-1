@@ -7,7 +7,7 @@
     </div>
     <table class="table table-inbox table-bordered">
         <tbody>
-            <% if (locals.listNotification) {
+            <% if (listNotification) {
                 for(var i=0; i<listNotification.length; i++) {
                     if( listNotification[i].receiverState == '1' ) {%>
                         <tr id="<%- listNotification[i].id %>" class="unread">

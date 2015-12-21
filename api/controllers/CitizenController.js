@@ -62,7 +62,12 @@ module.exports = {
 				Alert.find ({ user: req.session.user.id }).where({isDeleted : false}).then (function (listAlert) { 
 					res.view('citizen/layout', {
 						user: req.session.user,
+						users: req.session.users,
 						listAlert: listAlert,
+						listScout: [],
+						numberNotifications: req.session.numberNotifications,
+						listNotification: req.session.listNotification,
+						listNotificationSended: req.session.listNotificationSended,
 						listEvent: req.session.listEvent
 					});
 				});			
