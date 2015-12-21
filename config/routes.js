@@ -151,6 +151,11 @@ module.exports.routes = {
       action: 'usersRight'
   },
 
+  '/admin/export/allEvents': {
+      controller: 'AdminController',
+      action: 'exportAllEvents'
+  },
+
   '/user/update': {
       controller: 'UserController',
       action: 'update'

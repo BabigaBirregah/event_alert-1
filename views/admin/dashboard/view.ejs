@@ -1,3 +1,10 @@
+<style type="text/css">
+	.panel{
+		background: rgba(255, 255, 255, 0.8);
+		box-shadow: rgba(0, 0, 0, 0.3) 20px 20px 20px;
+		margin-top: 50px;
+	}
+</style>
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
@@ -5,6 +12,86 @@
         </div>
     </div>
     <div class="row">
-    <% include panels.ejs %>
+    	<% include panels.ejs %>
+    	<div class="container-fluid">
+				<div class="container-page">		
+					<div class="col-md-5">
+						<div class="panel panel-default">
+        					<div class="panel-heading">
+        						<h3 class="panel-title">Export</h3>
+        					</div>
+        					<div class="panel-body">
+        						<div class="tools">
+        							<div style="width:100px">
+        								<div>Export all event</div>
+        								<center><a id="export_all_event"><span class="glyphicon glyphicon-cloud-download" style="font-size:40px;"></span></a></center>
+        							</div>
+        						</div>
+        					</div>
+        				</div>
+					</div>
+					<div class="col-md-7">
+						<h3 class="dark-grey">Localisation..</h3>
+						<div id="map" style="width:910px;height:500px;"></div>
+					</div>
+				</div>
+		</div>
     </div>
 </div>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript">
+	$( "#export_all_event" ).click(function() {
+	    $.ajax({
+            type: 'POST',
+            url: '/admin/export/allEvents',
+       		success : function(data){ 
+           		console.log(data);
+			    var exportToCsv="", blob, url, a;
+
+			    for (var i=0; i<data['header'].length; i++) {
+			    	exportToCsv += data['header'][i]+data['delimiter'];
+			    }
+
+			    exportToCsv += "\n";
+
+			    for (var j=0; j<data['events'].length; j++) {
+			    	for (var k=0; k<data['header'].length; k++) {
+			    		if (data['header'][k] == "place") {
+							exportToCsv += data['events'][j][data['header'][k]].replace(";", "/")+data['delimiter'];
+			    		} else {
+			    			exportToCsv += data['events'][j][data['header'][k]]+data['delimiter'];
+			    		}
+				    }
+				    exportToCsv += "\n";
+			    }
+			    
+			    blob = new Blob([exportToCsv], { type: data['fileType'] });
+			    
+			    if ( blob ) {
+			        url = window.URL.createObjectURL( blob );
+			    
+			        a = document.createElement( "a" );
+			        document.body.appendChild( a );
+			        a.style = "display: none";
+			        a.href = url;
+			        a.download = data['fileName'];
+			    
+			        a.click();
+			    } 
+       		}
+        });
+	});
+
+	function initMap() {
+	  	var troyes = {lat: 48.2973451, lng: 4.0744009};
+
+		map = new google.maps.Map(document.getElementById('map'), {
+		    zoom: 8,
+		    center: troyes,
+		    mapTypeId: google.maps.MapTypeId.TERRAIN
+		});
+	}
+
+	google.maps.event.addDomListener(window, 'load', initMap);
+</script>

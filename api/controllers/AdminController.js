@@ -144,7 +144,21 @@ module.exports = {
 			});
 		});
 
-	}
+	},
+
+	exportAllEvents: function (req, res) {
+		Event.find().then (function (listEvents) {
+			var fileType = 'text/csv;charset=UTF-8';
+			var exportAllEvents = {
+				fileType: fileType,
+				fileName: "export_all_events."+fileType.split( "/" )[1].split( ";" )[0],
+				delimiter: ";",
+				header: ["id", "organizer", "title", "description", "date", "place", "state", "createdAt", "updatedAt"],
+				events: listEvents
+			};
+			res.send(exportAllEvents);
+		});
+	},
 };
 
 	
