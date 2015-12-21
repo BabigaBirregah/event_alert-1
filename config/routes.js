@@ -161,6 +161,11 @@ module.exports.routes = {
       action: 'update'
   },
 
+  '/statistic/events': {
+      controller: 'StatisticController',
+      action: 'events'
+  },
+
   '/statistic/alerts': {
       controller: 'StatisticController',
       action: 'alerts'

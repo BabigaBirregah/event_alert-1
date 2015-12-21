@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="/styles/admin.css">
+    <link rel="stylesheet" type="text/css" href="/styles/table-filters.css"/>
 </head>
 
 <body>
@@ -25,12 +26,12 @@
         <div id="page-wrapper">
             <div class="container" style="margin-left:0px;">
                 <div class="row">
-                    <h1 class="page-header">Alertes</h1>
+                    <h1 class="page-header">Evénements</h1>
                 </div>
                 <div class="row">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i> Statistiques de la dernière semaine
+                            <i class="fa fa-bar-chart-o fa-fw"></i> Tous
                             <div class="pull-right">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -38,13 +39,15 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu pull-right" role="menu">
-                                        <li><a href="#">de la dernière semaine</a></li>
+                                        <li><a href="#">Tous</a></li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         <div class="panel-body">
-                            <div id="morris-area-chart"></div>
+                            <div class="row">
+                                <div id="morris-bar-chart"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -62,6 +65,6 @@
 <script src="/js/table-filters.js"></script>
 <script type="text/javascript">
     $(function() {
-        Morris.Area(<%- JSON.stringify(dataChart) %>);
+        Morris.Bar(<%- JSON.stringify(dataChart) %>);
     });
 </script>

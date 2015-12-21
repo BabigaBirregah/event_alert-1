@@ -59,6 +59,49 @@ module.exports = {
 				});
 			});
 		});
+	},
+
+	events: function(req, res) {
+		var render = function (req, res) {
+			res.view('admin/chart/events', {
+				myNotifications: req.session.myNotifications,
+				dataChart: req.session.dataChart
+			});
+		};
+
+		var countAlerts = function(i) { 
+			if (i < req.session.events.length) {
+				Alert.count().where({event: req.session.events[i].id}).exec(function countCB(error, numberAlertes) {
+					req.session.dataChart.data.push({
+	            		event: req.session.events[i].title,
+	            		Alerte: numberAlertes,
+	        		});
+					countAlerts(i+1);
+				});				
+			} else {
+				render(req, res);
+			}
+		};
+
+		Event.find().then (function (events) {
+			req.session.events = events;
+
+			req.session.dataChart = {
+		        element: 'morris-bar-chart',
+		        data: [],
+		        xkey: 'event',
+		        ykeys: ['Alerte'],
+		        labels: ['Nombre d\'alerte'],
+		        hideHover: 'auto',
+		        resize: true
+		    }
+
+			if (events.length > 0) {
+				countAlerts(0);
+			} else {
+				render(req, res);
+			}
+		});
 	}
 };
 
