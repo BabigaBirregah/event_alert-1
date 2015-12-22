@@ -176,16 +176,67 @@ module.exports = {
 	},
 
 	exportAllEvents: function (req, res) {
-		Event.find().then (function (listEvents) {
+		var exportEventsSend = function (req, res) {
 			var now = new Date();
 			var exportAllEvents = {
 				fileType: 'csv',
 				exportName: "export-"+now.getDate()+"_"+now.getMonth()+"_"+now.getFullYear()+"-"+now.getHours()+"_"+now.getMinutes()+"_"+now.getSeconds(),
 				delimiter: ";",
-				header: ["id", "organizer", "title", "description", "date", "place", "state", "createdAt", "updatedAt"],
-				events: listEvents
+				headerEvent: ["id", "organizer", "title", "description", "date", "place", "state", "createdAt", "updatedAt"],
+				headerAlert: ["id", "type", "user", "details", "place", "isAnonymous", "isDeleted", "createdAt", "updatedAt"],
+				events: req.session.listEvents
 			};
 			res.send(exportAllEvents);
+		};
+
+		var findScout = function(i, j) {
+			if (i == req.session.listEvents.length) {
+				exportEventsSend(req, res);
+			} else if ( req.session.listEvents[i]['alerts'].length > 0 && j<req.session.listEvents[i]['alerts'].length ) {
+				Scout.find({ alert: req.session.listEvents[i]['alerts'][j].id }).then (function (scouts) {
+					req.session.listEvents[i]['alerts'][j].scouts = scouts;
+						findScout(i, j+1);
+				});
+			} else {
+				findScout(i + 1, 0);
+			}
+		};
+
+		var findAlerts = function(i) {
+			Alert.find({ event: req.session.listEvents[i].id }).then (function (alerts) {
+				req.session.listEvents[i]['alerts'] = alerts;
+				
+				if (i < req.session.listEvents.length-1) {
+					findAlerts(i+1);
+				} else {
+					findScout(0, 0);
+				}
+			});
+		};
+		var findTypesAlert = function(i) {
+			TypeAlert.find({ event: req.session.listEvents[i].id }).then (function (typesAlert) {
+				req.session.listEvents[i]['typesAlert'] = typesAlert;
+				
+				if (i < req.session.listEvents.length-1) {
+					findTypesAlert(i+1);
+				} else {
+					findAlerts(0);
+				}
+			});
+		};	
+
+		User.find().then (function (users) { 
+			req.session.users = users;
+		});
+
+		Event.find().then (function (listEvents) {
+			req.session.listEvents = listEvents;
+
+			if ( listEvents.length > 0 ) {
+				findTypesAlert(0);
+			} else {
+				exportEventsSend();
+			}
 		});
 	},
 };

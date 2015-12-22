@@ -24,14 +24,6 @@
 	        					<ul class="list-group">
 	        						<li class="list-group-item">
 		        						<div class="tools">
-		        							<div style="width:135px">
-		        								Export specific event
-		        								<center><a id="export_specific_event"><span class="glyphicon glyphicon-cloud-download" style="font-size:40px;"></span></a></center>
-		        							</div>
-		        						</div>
-	        						</li>
-	        						<li class="list-group-item">
-		        						<div class="tools">
 		        							<div style="width:100px">
 		        								<div>Export all event</div>
 		        								<center><a id="export_all_event"><span class="glyphicon glyphicon-cloud-download" style="font-size:40px;"></span></a></center>
@@ -55,26 +47,54 @@
 <script src="/js/jszip.js"></script>
 <script type="text/javascript">
 	$( "#export_all_event" ).click(function() {
-		function exportToCsv(data) { 
-			var dataToCsv="";
+		function exportAlertsToCsv(data, indice) { 
+			var dataToAlertsCsv="";
 
-		    for (var i=0; i<data['header'].length; i++) {
-		    	dataToCsv += data['header'][i]+data['delimiter'];
+		    for (var i=0; i<data['headerAlert'].length; i++) {
+		    	dataToAlertsCsv += data['headerAlert'][i]+data['delimiter'];
 		    }
 
-		    dataToCsv += "\n";
+		    dataToAlertsCsv += "\n";
+		    console.log(data['events'][indice]['alerts']);
+
+		    for (var j=0; j<data['events'][indice]['alerts'].length; j++) {
+		    	for (var k=0; k<data['headerAlert'].length; k++) {
+		    		dataToAlertsCsv += data['events'][indice]['alerts'][j][data['headerAlert'][k]]+data['delimiter'];
+			    }
+			    dataToAlertsCsv += "\n";
+		    }
+			return dataToAlertsCsv;
+		}
+
+		function exportEventsToCsv(data, alertsFolder) { 
+			var dataToEventsCsv="";
+
+		    for (var i=0; i<data['headerEvent'].length; i++) {
+		    	dataToEventsCsv += data['headerEvent'][i]+data['delimiter'];
+		    }
+
+		    dataToEventsCsv += "alertes"+ data['delimiter'];
+
+		    dataToEventsCsv += "\n";
 
 		    for (var j=0; j<data['events'].length; j++) {
-		    	for (var k=0; k<data['header'].length; k++) {
-		    		if (data['header'][k] == "place") {
-						dataToCsv += data['events'][j][data['header'][k]].replace(";", "/")+data['delimiter'];
+		    	for (var k=0; k<data['headerEvent'].length; k++) {
+		    		if (data['headerEvent'][k] == "place") {
+						dataToEventsCsv += data['events'][j][data['headerEvent'][k]].replace(";", "/")+data['delimiter'];
 		    		} else {
-		    			dataToCsv += data['events'][j][data['header'][k]]+data['delimiter'];
+		    			dataToEventsCsv += data['events'][j][data['headerEvent'][k]]+data['delimiter'];
 		    		}
 			    }
-			    dataToCsv += "\n";
+			    if ( data['events'][j].alerts.length > 0 ) {
+			    	var alertFile = data['events'][j].id+"_"+data['events'][j].title+"."+data['fileType'];
+			    	dataToEventsCsv += "=LIEN_HYPERTEXTE(\"alerts/"+alertFile+"\")";
+					alertsFolder.add(alertFile, exportAlertsToCsv(data, j));
+			    } else {
+			    	dataToEventsCsv += "Pas d'incident signalé";
+			    }
+			    dataToEventsCsv += "\n";
 		    }
-			return dataToCsv;
+			return dataToEventsCsv;
 		}
 
 	    $.ajax({
@@ -83,7 +103,8 @@
        		success : function(data){ 
        			var zip = new JSZip();
        			var events = zip.folder(data['exportName']);
-       			events.add("events."+data['fileType'], exportToCsv(data));
+       			var alerts = events.folder('alerts');
+       			events.add("events."+data['fileType'], exportEventsToCsv(data, alerts));
 				content = zip.generate();
 				location.href="data:application/zip;base64,"+content;
        		}
