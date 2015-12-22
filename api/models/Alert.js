@@ -19,7 +19,11 @@ module.exports = {
   		user : { 
             model: 'user'
         },
-  		details : { 
+        details : { 
+            type: 'string',
+            required: true
+        },  		
+        place : { 
             type: 'string',
             required: true
         },

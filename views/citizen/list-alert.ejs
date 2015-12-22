@@ -26,6 +26,7 @@
 									                        <th><input type="text" class="form-control" placeholder="Type d'alerte" disabled></th>
 									                        <th><input type="text" class="form-control" placeholder="Auteur" disabled></th>
 									                        <th><input type="text" class="form-control" placeholder="Details" disabled></th>
+									                        <th><input type="text" class="form-control" placeholder="Place" disabled></th>
 									                        <th>Anonyme</th>
                     										<th style="display:none">#</th>
 									                        <th class="tabledit-toolbox-column"></th>
@@ -38,7 +39,8 @@
 																<td><%- listAlert[i].type %></td>
 																<td><img src="/icon/edit_user.jpg"></img> <%- user.username %></td>
 
-                        											<td class="tabledit-view-mode"><span class="tabledit-span"><%- listAlert[i].details %></span><input class="tabledit-input form-control input-sm" type="text" name="description" value="<%- listAlert[i].details %>" style="display: none;" disabled=""></td>
+                        										<td class="tabledit-view-mode"><span class="tabledit-span"><%- listAlert[i].details %></span><input class="tabledit-input form-control input-sm" type="text" name="description" value="<%- listAlert[i].details %>" style="display: none;" disabled=""></td>
+                        										<td><%- listAlert[i].place %></td>
 
 																<td><%- listAlert[i].isAnonymous %></td>
 																<td scope="row" style="display:none"><%- listAlert[i].id %></td>

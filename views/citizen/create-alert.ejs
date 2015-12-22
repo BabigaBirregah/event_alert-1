@@ -51,6 +51,11 @@
 										<input type="text" name="details" class="form-control" id="" value="">
 									</div>
 									<div class="form-group col-lg-12">
+										<label>Place</label>
+										<input id="autocomplete" type="text" name="place" class="form-control">
+									</div>
+
+									<div class="form-group col-lg-12">
 										<label style="margin-left: 30px">Rester en anonyme..</label>
 										<div class="material-switch pull-left">
 				                            <input type="checkbox" name="isAnonymous"  id="isAnonymous"/>
@@ -132,4 +137,12 @@
 	$('#datetimepicker_mask').datetimepicker({
 		mask:'9999/19/39 29:59'
 	});
+
+	var autocomplete;
+
+	function initAutocomplete() {
+	  	autocomplete = new google.maps.places.Autocomplete((document.getElementById('autocomplete')),{types: ['geocode']});
+	  	autocomplete.addListener('place_changed', fillInAddress);
+	}
 </script>
+<script src="https://maps.googleapis.com/maps/api/js?signed_in=true&libraries=places&callback=initAutocomplete" async defer></script>

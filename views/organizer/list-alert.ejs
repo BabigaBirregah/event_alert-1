@@ -26,6 +26,7 @@
 									                        <th><input type="text" class="form-control" placeholder="Type" disabled></th>
 									                        <th><input type="text" class="form-control" placeholder="Auteur" disabled></th>
 									                        <th><input type="text" class="form-control" placeholder="Details" disabled></th>
+									                        <th><input type="text" class="form-control" placeholder="Place" disabled></th>
 									                        <th style="width:200px">User access</th>
 									                    </tr>
 									                </thead>
@@ -48,6 +49,7 @@
 																		}%>
 																	</td>
 																	<td><%- listEvent[i].alerts[j].details %></td>
+																	<td><%- listEvent[i].alerts[j].place %></td>
 																	<td> 
 																		<% if (listEvent[i].alerts[j].isDeleted == 0) {%>
 																			<div class="list well" style="max-height: 150px;overflow: auto;">
