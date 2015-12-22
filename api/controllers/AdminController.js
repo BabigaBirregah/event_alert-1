@@ -48,10 +48,35 @@ module.exports = {
 		var render = function (req, res) {
 			res.view('admin/table/events', {
 				myNotifications: req.session.myNotifications,
-				listEvents: req.session.listEvents
+				listEvents: req.session.listEvents,
+				users: req.session.users,
 			});
 		}
 
+		var findScout = function(i, j) {
+			if (i == req.session.listEvents.length) {
+				render(req, res);
+			} else if ( req.session.listEvents[i]['alerts'].length > 0 && j<req.session.listEvents[i]['alerts'].length ) {
+				Scout.find({ alert: req.session.listEvents[i]['alerts'][j].id }).then (function (scouts) {
+					req.session.listEvents[i]['alerts'][j].scouts = scouts;
+						findScout(i, j+1);
+				});
+			} else {
+				findScout(i + 1, 0);
+			}
+		};
+
+		var findAlerts = function(i) {
+			Alert.find({ event: req.session.listEvents[i].id }).then (function (alerts) {
+				req.session.listEvents[i]['alerts'] = alerts;
+				
+				if (i < req.session.listEvents.length-1) {
+					findAlerts(i+1);
+				} else {
+					findScout(0, 0);
+				}
+			});
+		};
 		var findTypesAlert = function(i) {
 			TypeAlert.find({ event: req.session.listEvents[i].id }).then (function (typesAlert) {
 				req.session.listEvents[i]['typesAlert'] = typesAlert;
@@ -59,10 +84,14 @@ module.exports = {
 				if (i < req.session.listEvents.length-1) {
 					findTypesAlert(i+1);
 				} else {
-					render(req, res);
+					findAlerts(0);
 				}
 			});
-		};		
+		};	
+
+		User.find().then (function (users) { 
+			req.session.users = users;
+		});
 
 		Event.find().then (function (listEvents) {
 			req.session.listEvents = listEvents;
