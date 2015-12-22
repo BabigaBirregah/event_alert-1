@@ -21,12 +21,24 @@
         						<h3 class="panel-title">Export</h3>
         					</div>
         					<div class="panel-body">
-        						<div class="tools">
-        							<div style="width:100px">
-        								<div>Export all event</div>
-        								<center><a id="export_all_event"><span class="glyphicon glyphicon-cloud-download" style="font-size:40px;"></span></a></center>
-        							</div>
-        						</div>
+	        					<ul class="list-group">
+	        						<li class="list-group-item">
+		        						<div class="tools">
+		        							<div style="width:135px">
+		        								Export specific event
+		        								<center><a id="export_specific_event"><span class="glyphicon glyphicon-cloud-download" style="font-size:40px;"></span></a></center>
+		        							</div>
+		        						</div>
+	        						</li>
+	        						<li class="list-group-item">
+		        						<div class="tools">
+		        							<div style="width:100px">
+		        								<div>Export all event</div>
+		        								<center><a id="export_all_event"><span class="glyphicon glyphicon-cloud-download" style="font-size:40px;"></span></a></center>
+		        							</div>
+		        						</div>
+	        						</li>
+	        					</ul>
         					</div>
         				</div>
 					</div>
@@ -39,46 +51,41 @@
     </div>
 </div>
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="/js/jquery.js"></script>
+<script src="/js/jszip.js"></script>
 <script type="text/javascript">
 	$( "#export_all_event" ).click(function() {
+		function exportToCsv(data) { 
+			var dataToCsv="";
+
+		    for (var i=0; i<data['header'].length; i++) {
+		    	dataToCsv += data['header'][i]+data['delimiter'];
+		    }
+
+		    dataToCsv += "\n";
+
+		    for (var j=0; j<data['events'].length; j++) {
+		    	for (var k=0; k<data['header'].length; k++) {
+		    		if (data['header'][k] == "place") {
+						dataToCsv += data['events'][j][data['header'][k]].replace(";", "/")+data['delimiter'];
+		    		} else {
+		    			dataToCsv += data['events'][j][data['header'][k]]+data['delimiter'];
+		    		}
+			    }
+			    dataToCsv += "\n";
+		    }
+			return dataToCsv;
+		}
+
 	    $.ajax({
             type: 'POST',
             url: '/admin/export/allEvents',
        		success : function(data){ 
-           		console.log(data);
-			    var exportToCsv="", blob, url, a;
-
-			    for (var i=0; i<data['header'].length; i++) {
-			    	exportToCsv += data['header'][i]+data['delimiter'];
-			    }
-
-			    exportToCsv += "\n";
-
-			    for (var j=0; j<data['events'].length; j++) {
-			    	for (var k=0; k<data['header'].length; k++) {
-			    		if (data['header'][k] == "place") {
-							exportToCsv += data['events'][j][data['header'][k]].replace(";", "/")+data['delimiter'];
-			    		} else {
-			    			exportToCsv += data['events'][j][data['header'][k]]+data['delimiter'];
-			    		}
-				    }
-				    exportToCsv += "\n";
-			    }
-			    
-			    blob = new Blob([exportToCsv], { type: data['fileType'] });
-			    
-			    if ( blob ) {
-			        url = window.URL.createObjectURL( blob );
-			    
-			        a = document.createElement( "a" );
-			        document.body.appendChild( a );
-			        a.style = "display: none";
-			        a.href = url;
-			        a.download = data['fileName'];
-			    
-			        a.click();
-			    } 
+       			var zip = new JSZip();
+       			var events = zip.folder(data['exportName']);
+       			events.add("events."+data['fileType'], exportToCsv(data));
+				content = zip.generate();
+				location.href="data:application/zip;base64,"+content;
        		}
         });
 	});

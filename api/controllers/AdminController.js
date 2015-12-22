@@ -148,10 +148,10 @@ module.exports = {
 
 	exportAllEvents: function (req, res) {
 		Event.find().then (function (listEvents) {
-			var fileType = 'text/csv;charset=UTF-8';
+			var now = new Date();
 			var exportAllEvents = {
-				fileType: fileType,
-				fileName: "export_all_events."+fileType.split( "/" )[1].split( ";" )[0],
+				fileType: 'csv',
+				exportName: "export-"+now.getDate()+"_"+now.getMonth()+"_"+now.getFullYear()+"-"+now.getHours()+"_"+now.getMinutes()+"_"+now.getSeconds(),
 				delimiter: ";",
 				header: ["id", "organizer", "title", "description", "date", "place", "state", "createdAt", "updatedAt"],
 				events: listEvents

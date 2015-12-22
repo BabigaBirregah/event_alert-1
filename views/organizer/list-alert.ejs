@@ -57,7 +57,7 @@
 																			    </div>
 																				<ul class="list-group checked-list-box">
 																					<% for(var l=0; l<users.length; l++) {
-																						if( users[l].id!=user.id && users[l].id != listEvent[i].alerts[j].user ){	
+																						if( users[l].id!=user.id && users[l].id != listEvent[i].alerts[j].user && users[l].type != 'a'){	
 																							var found = false; 
 																							if( listEvent[i].alerts[j].scouts ) {
 																								for (var m=0; m<listEvent[i].alerts[j].scouts.length; m++) {
