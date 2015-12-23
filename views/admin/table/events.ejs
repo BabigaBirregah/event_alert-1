@@ -41,7 +41,8 @@
                                 <tr class="filters">
                                     <th><input type="text" class="form-control" placeholder="Titre" disabled></th>
                                     <th><input type="text" class="form-control" placeholder="Description" disabled></th>
-                                    <th><input type="text" class="form-control" placeholder="Date" disabled></th>
+                                    <th><input type="text" class="form-control" placeholder="Date de début" disabled></th>
+                                    <th><input type="text" class="form-control" placeholder="Date de fin" disabled></th>
                                     <th><input type="text" class="form-control" placeholder="Lieu" disabled></th>
                                     <th>Type d'alerte</th>
                                     <th>Statut</th>
@@ -55,7 +56,9 @@
 
                                         <td><%- listEvents[i].description %></td>
 
-                                        <td><%- listEvents[i].date %></td>
+                                        <td><%- listEvents[i].startDate %></td>
+
+                                        <td><%- listEvents[i].endDate %></td>
 
                                         <td class="place"><%- listEvents[i].place %></td>
                                         

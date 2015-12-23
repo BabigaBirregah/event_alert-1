@@ -38,8 +38,6 @@ function exportEventsToCsv(data, alertsFolder) {
 
     dataToEventsCsv += "\n";
 
-
-
     for (var j=0; j<data['events'].length; j++) {
     	for (var k=0; k<data['headerEvent'].length; k++) {
     		if (data['headerEvent'][k] == "place") {

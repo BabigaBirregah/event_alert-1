@@ -206,7 +206,7 @@ module.exports = {
 				fileType: 'csv',
 				exportName: "export-"+now.getDate()+"_"+now.getMonth()+"_"+now.getFullYear()+"-"+now.getHours()+"_"+now.getMinutes()+"_"+now.getSeconds(),
 				delimiter: ";",
-				headerEvent: ["id", "organizer", "title", "description", "date", "place", "state", "typesAlert", "createdAt", "updatedAt"],
+				headerEvent: ["id", "organizer", "title", "description", "startDate", "endDate", "place", "state", "typesAlert", "createdAt", "updatedAt"],
 				headerAlert: ["id", "type", "user", "details", "place", "isAnonymous", "isDeleted", "scouts", "createdAt", "updatedAt"],
 				headerUser: ["id", "email", "username", "type", "createdAt", "updatedAt"],
 				headerNotifications: ["id", "subject", "content", "senderState", "receiverState", "user", "username", "relatedUser", "relatedUsername", "createdAt"],

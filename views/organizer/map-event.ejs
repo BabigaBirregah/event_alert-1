@@ -41,7 +41,7 @@
 			    	}
 			    	typesAlertHtml += "</ul>";
 			    	var eventHtml = "<div class=\"offer offer-radius offer-primary\"><div class=\"shape\"><div class=\"shape-text\">Event</div></div><div id=\"event_content\" class=\"offer-content\">";
-			    	eventHtml += "<table class=\"table table-user-information\"><tbody><tr><td>Titre : </td><td>"+event.title+"</td></tr><tr><td>Description:</td><td>"+event.description+"</td></tr><tr><td>Date:</td><td>"+event.date+"</td></tr><tr><td>Type(s) d'alerte:</td><td>"+typesAlertHtml+"</td></tr><tr><td><a href=\"/event/destroy/"+event.id+"\">supprimer</a></td></tr></tbody></table></div>";
+			    	eventHtml += "<table class=\"table table-user-information\"><tbody><tr><td>Titre : </td><td>"+event.title+"</td></tr><tr><td>Description:</td><td>"+event.description+"</td></tr><tr><td>Date de début:</td><td>"+event.startDate+"</td></tr><tr><td>Date de fin:</td><td>"+event.endDate+"</td></tr><tr><td>Type(s) d'alerte:</td><td>"+typesAlertHtml+"</td></tr><tr><td><a href=\"/event/destroy/"+event.id+"\">supprimer</a></td></tr></tbody></table></div>";
 			        infowindow.setContent(eventHtml);
 			        infowindow.open(map_view,marker);
 			    };

@@ -11,7 +11,8 @@
                 <tr class="filters">
                     <th><input type="text" class="form-control" placeholder="Titre" disabled></th>
                     <th><input type="text" class="form-control" placeholder="Description" disabled></th>
-                    <th><input type="text" class="form-control" placeholder="Date" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Date de début" disabled></th>
+                    <th><input type="text" class="form-control" placeholder="Date de fin" disabled></th>
                     <th><input type="text" class="form-control" placeholder="Lieu" disabled></th>
                     <th>Type d'alerte</th>
                     <th>Statut</th>
@@ -26,7 +27,9 @@
 
                         <td class="tabledit-view-mode"><span class="tabledit-span"><%- listEvent[i].description %></span><input class="tabledit-input form-control input-sm" type="text" name="description" value="<%- listEvent[i].description %>" style="display: none;" disabled=""></td>
 
-                        <td class="tabledit-view-mode"><span class="tabledit-span"><%- listEvent[i].date %></span><input class="tabledit-input form-control input-sm" type="text" name="date" value="<%- listEvent[i].date %>" style="display: none;" disabled=""></td>
+                        <td class="tabledit-view-mode"><span class="tabledit-span"><%- listEvent[i].startDate %></span><input class="tabledit-input form-control input-sm" type="text" name="startDate" value="<%- listEvent[i].startDate %>" style="display: none;" disabled=""></td>
+
+                        <td class="tabledit-view-mode"><span class="tabledit-span"><%- listEvent[i].endDate %></span><input class="tabledit-input form-control input-sm" type="text" name="endDate" value="<%- listEvent[i].endDate %>" style="display: none;" disabled=""></td>
 
                         <td class="place"><%- listEvent[i].place %></td>
                         
@@ -88,8 +91,8 @@
     $('#table_event').Tabledit({
         url: '/event/tableEdit',
         columns: {
-            identifier: [6, 'id'],
-            editable: [[0, 'title'],[1, 'description'],[2, 'date']]
+            identifier: [7, 'id'],
+            editable: [[0, 'title'],[1, 'description'],[2, 'startDate'],[3, 'endDate']]
         },
         buttons: {
             edit: {

@@ -114,7 +114,7 @@
 			    		typesAlertHtml += "<option>"+event.typesAlert[i].name+"</option>"
 			    	}
 			   
-			    	var eventHtml = "<table class=\"table table-user-information\"><tbody><tr><td>Titre : </td><td>"+event.title+"</td></tr><tr><td>Description:</td><td>"+event.description+"</td></tr><tr><td>Date:</td><td>"+event.date+"</td></tr><tr hidden><td>Lieu:</td><td class=\"place\">"+event.place+"</td></tr></tbody></table>";
+			    	var eventHtml = "<table class=\"table table-user-information\"><tbody><tr><td>Titre : </td><td>"+event.title+"</td></tr><tr><td>Description:</td><td>"+event.description+"</td></tr><tr><td>Date de début:</td><td>"+event.startDate+"</td></tr><tr><td>Date de fin:</td><td>"+event.endDate+"</td></tr><tr hidden><td>Lieu:</td><td class=\"place\">"+event.place+"</td></tr></tbody></table>";
 			        $("#event_content").html(eventHtml);
 			        $("#event").val(event.id); 
 			        $("#type").html(typesAlertHtml); 

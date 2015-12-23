@@ -19,7 +19,11 @@ module.exports = {
             type: 'string',
             required: true
         },
-  		date : { 
+  		startDate : { 
+            type: 'string',
+            required: true
+        },
+        endDate : { 
             type: 'string',
             required: true
         },
