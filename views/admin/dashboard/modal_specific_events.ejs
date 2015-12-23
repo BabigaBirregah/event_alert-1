@@ -1,0 +1,126 @@
+<div class="modal" id="modal-specific-events" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width:100%">
+	<div class="modal-dialog" style="width:100%">
+	    <div class="modal-content">
+	        <div class="modal-body">
+				<div class="panel panel-primary filterable">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Evénements</h3>
+                        <div class="pull-right">
+                            <span class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filter</span>
+                        </div>
+                    </div>
+                    <table class="table table-hover table-striped table-bordered" id="table_specific_events">
+                        <thead>
+                            <tr class="filters">
+                                <th><input type="checkbox" id="check_all_event" /></th>
+                                <th><input type="text" class="form-control" placeholder="Titre" disabled></th>
+                                <th><input type="text" class="form-control" placeholder="Description" disabled></th>
+                                <th><input type="text" class="form-control" placeholder="Date" disabled></th>
+                                <th><input type="text" class="form-control" placeholder="Lieu" disabled></th>
+                                <th>Type d'alerte</th>
+                                <th>Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for(var i=0; i<listEvents.length; i++) {%>
+                                <tr>
+                                    <td><input id="<%- listEvents[i].id %>" type="checkbox" class="check_event" /></td>
+                                    <td><%- listEvents[i].title %></td>
+
+                                    <td><%- listEvents[i].description %></td>
+
+                                    <td><%- listEvents[i].date %></td>
+
+                                    <td class="place"><%- listEvents[i].place %></td>
+                                    
+                                    <td>
+                                        <ul>
+                                            <% for(var j=0; j<listEvents[i].typesAlert.length; j++) {%>
+                                                <li><%- listEvents[i].typesAlert[j].name %></li>
+                                            <% } %>
+                                        </ul>
+                                    </td>
+
+                                    <td id="<%- listEvents[i].id %>" style="width:135px">
+                                        <% 
+                                        if (listEvents[i].state == 0) {%>
+                                            <span class="label label-danger">Supprimé</span>
+                                        <%} 
+
+                                        if (listEvents[i].state == 1) {%>
+                                            <span class="label label-warning">A valider</span>
+                                        <%}
+
+                                        if (listEvents[i].state == 2) {%>
+                                            <span class="label label-success">Validé</span>
+                                        <%}%>
+                                    </td>
+                                </tr>
+                            <%}%>
+                        </tbody>
+                    </table>
+                </div>	        
+	        </div>
+	    </div>
+	</div>
+</div>
+
+<script type="text/javascript">
+    var geocoder;
+    $(function(){
+        geocoder = new google.maps.Geocoder();
+        var coordinates = document.getElementsByClassName("place");
+        for (var i=0; i<coordinates.length; i++) {
+            coordinates[i].id = coordinates[i].innerHTML;
+            retrieveAddress(coordinates[i], coordinates[i].innerHTML);
+        }
+    });
+
+    function retrieveAddress(coordinate, input) {
+        var latlngStr = input.split(";",2);
+        var lat = parseFloat(latlngStr[0]);
+        var lng = parseFloat(latlngStr[1]);
+        var latlng = new google.maps.LatLng(lat, lng);
+        geocoder.geocode({'latLng': latlng}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK && results[0]) {
+                coordinate.innerHTML = results[0].formatted_address;
+            } 
+        });
+    }
+
+    $(document).ready(function(){
+        $("#table_specific_events #check_all_event").click(function () {
+            if ($("#table_specific_events #check_all_event").is(':checked')) {
+                $("#table_specific_events input[type=checkbox]").each(function () {
+                    $(this).prop("checked", true);
+                });
+
+            } else {
+                $("#table_specific_events input[type=checkbox]").each(function () {
+                    $(this).prop("checked", false);
+                });
+            }
+        });
+        
+        $("[data-toggle=tooltip]").tooltip();
+
+        $("#table_specific_events > tbody > tr").click(function () {
+            var checkbox = $(this).children().children();
+            if ( checkbox.is(':checked') ) {
+                checkbox.prop("checked", false);
+            } else {
+                checkbox.prop("checked", true);
+            }
+        });
+        
+        $(".check_event").click(function () {
+            var checkbox = $(this);
+            if ( checkbox.is(':checked') ) {
+                checkbox.prop("checked", false);
+            } else {
+                checkbox.prop("checked", true);
+            }
+        });
+    });
+
+</script>

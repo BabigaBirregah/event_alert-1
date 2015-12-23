@@ -151,9 +151,9 @@ module.exports.routes = {
       action: 'usersRight'
   },
 
-  '/admin/export/allData': {
+  '/admin/export/data': {
       controller: 'AdminController',
-      action: 'exportAllData'
+      action: 'exportData'
   },
 
   '/user/update': {

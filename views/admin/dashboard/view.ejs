@@ -14,55 +14,92 @@
     <div class="row">
     	<% include panels.ejs %>
     	<div class="container-fluid">
-				<div class="container-page">		
-					<div class="col-md-5">
-						<div class="panel panel-default">
-        					<div class="panel-heading">
-        						<h3 class="panel-title">Export</h3>
-        					</div>
-        					<div class="panel-body">
-	        					<ul class="list-group">
-	        						<li class="list-group-item">
-		        						<div class="tools">
-		        							<div style="width:100px">
-		        								<div>Export all event</div>
-		        								<center><a id="export_all_event"><span class="glyphicon glyphicon-cloud-download" style="font-size:40px;"></span></a></center>
-		        							</div>
-		        						</div>
-	        						</li>
-	        					</ul>
-        					</div>
-        				</div>
-					</div>
-					<div class="col-md-7">
-						<h3 class="dark-grey">Localisation..</h3>
-						<div id="map" style="width:910px;height:500px;"></div>
-					</div>
+			<div class="container-page">		
+				<div class="col-md-5">
+					<div class="panel panel-default">
+    					<div class="panel-heading">
+    						<h3 class="panel-title">Export</h3>
+    					</div>
+    					<div class="panel-body">
+        					<ul class="list-group">
+        						<li class="list-group-item">
+	        						<div class="tools">
+	        							<div style="width:165px">
+	        								Export specific events <a style="margin-left: 5px"><i id="specific_events" class="fa fa-tasks fa-1x"></i></a>
+	        								<center><a id="export_specific_events"><span class="glyphicon glyphicon-cloud-download" style="font-size:40px;"></span></a></center>
+	        							</div>
+	        						</div>
+        						</li>
+        						<li class="list-group-item">
+	        						<div class="tools">
+	        							<div style="width:100px">
+	        								<div>Export all event</div>
+	        								<center><a id="export_all_event"><span class="glyphicon glyphicon-cloud-download" style="font-size:40px;"></span></a></center>
+	        							</div>
+	        						</div>
+        						</li>
+        					</ul>
+    					</div>
+    				</div>
 				</div>
+				<div class="col-md-7">
+					<h3 class="dark-grey">Localisation..</h3>
+					<div id="map" style="width:910px;height:500px;"></div>
+				</div>
+			</div>
 		</div>
-    </div>
+    </div>    
+    <% include modal_specific_events.ejs %>
 </div>
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js"></script>
 <script src="/js/jquery.js"></script>
 <script src="/js/jszip.js"></script>
 <script src="/js/exportToCsv.js"></script>
 <script type="text/javascript">
+	var exportData = function(data) {
+		var zip = new JSZip();
+		var exportFolder = zip.folder(data['exportName']);
+		var alertsFolder = exportFolder.folder('alerts');
+		exportFolder.add("events."+data['fileType'], exportEventsToCsv(data, alertsFolder));
+		exportFolder.add("notifications."+data['fileType'], exportNotificationsToCsv(data));
+		exportFolder.add("users."+data['fileType'], exportUsersToCsv(data));
+		content = zip.generate();
+		location.href="data:application/zip;base64,"+content;
+	}
 	$( "#export_all_event" ).click(function() {
 	    $.ajax({
             type: 'POST',
-            url: '/admin/export/allData',
+            url: '/admin/export/data',
        		success : function(data){ 
-       			var zip = new JSZip();
-       			var exportFolder = zip.folder(data['exportName']);
-       			var alertsFolder = exportFolder.folder('alerts');
-       			exportFolder.add("events."+data['fileType'], exportEventsToCsv(data, alertsFolder));
-       			exportFolder.add("notifications."+data['fileType'], exportNotificationsToCsv(data));
-       			exportFolder.add("users."+data['fileType'], exportUsersToCsv(data));
-				content = zip.generate();
-				location.href="data:application/zip;base64,"+content;
+				exportData(data);
        		}
         });
 	});
+
+	$( "#export_specific_events" ).click(function() {
+		var specificEvents = $(".check_event:checked");
+		var idSpecificEvents = [];
+
+		for (var i=0; i<specificEvents.length; i++ ) {
+			idSpecificEvents.push(specificEvents[i].id);
+		}
+
+		var params = "idSpecificEvents="+idSpecificEvents;
+
+	    $.ajax({
+            type: 'POST',
+            data: params,
+            url: '/admin/export/data',
+       		success : function(data){ 
+          		exportData(data);
+       		}
+       });
+	});
+
+	$('#specific_events').on('click', function(event) {
+        event.preventDefault();
+        $('#modal-specific-events').modal('show');
+    })
 
 	function initMap() {
 	  	var troyes = {lat: 48.2973451, lng: 4.0744009};
