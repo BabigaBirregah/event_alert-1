@@ -55,11 +55,21 @@
 		    }
 
 		    dataToAlertsCsv += "\n";
-		    console.log(data['events'][indice]['alerts']);
 
 		    for (var j=0; j<data['events'][indice]['alerts'].length; j++) {
 		    	for (var k=0; k<data['headerAlert'].length; k++) {
-		    		dataToAlertsCsv += data['events'][indice]['alerts'][j][data['headerAlert'][k]]+data['delimiter'];
+		    		if ( data['headerAlert'][k] == "scouts" ) {
+		    			for (var l=0; l<data['events'][indice]['alerts'][j]['scouts'].length; l++) {
+		    				for(var m=0; m<data.users.length; m++) {
+                                if( data.users[m].id == data['events'][indice]['alerts'][j]['scouts'][l].user ) {
+                                        dataToAlertsCsv += data.users[m].username+' ';
+                                }
+                            } 
+		    			}
+		    			dataToAlertsCsv += ';';
+		    		} else {
+		    			dataToAlertsCsv += data['events'][indice]['alerts'][j][data['headerAlert'][k]]+data['delimiter'];
+		    		}
 			    }
 			    dataToAlertsCsv += "\n";
 		    }
@@ -77,11 +87,20 @@
 
 		    dataToEventsCsv += "\n";
 
+
+
 		    for (var j=0; j<data['events'].length; j++) {
 		    	for (var k=0; k<data['headerEvent'].length; k++) {
 		    		if (data['headerEvent'][k] == "place") {
-						dataToEventsCsv += data['events'][j][data['headerEvent'][k]].replace(";", "/")+data['delimiter'];
-		    		} else {
+						dataToEventsCsv += data['events'][j]["place"].replace(";", "/")+data['delimiter'];
+		    		} 
+		     		else if (data['headerEvent'][k] == "typesAlert") {
+						for (var l=0; l<data['events'][j]['typesAlert'].length; l++) {
+							dataToEventsCsv += data['events'][j]['typesAlert'][l]['name']+' ';
+				    	}
+    					dataToEventsCsv += ';';
+		     		} 
+		    		else {
 		    			dataToEventsCsv += data['events'][j][data['headerEvent'][k]]+data['delimiter'];
 		    		}
 			    }
@@ -97,14 +116,55 @@
 			return dataToEventsCsv;
 		}
 
+		function exportNotificationsToCsv(data) { 
+			console.log(data['notifications']);
+			var dataToNotificationsCsv="";
+
+		    for (var i=0; i<data['headerNotifications'].length; i++) {
+		    	dataToNotificationsCsv += data['headerNotifications'][i]+data['delimiter'];
+		    }
+
+		    dataToNotificationsCsv += "\n";
+
+		    for (var j=0; j<data['notifications'].length; j++) {
+		    	for (var k=0; k<data['headerNotifications'].length; k++) {
+		    		dataToNotificationsCsv += data['notifications'][j][data['headerNotifications'][k]]+data['delimiter'];
+			    }
+			   
+			    dataToNotificationsCsv += "\n";
+		    }
+			return dataToNotificationsCsv;
+		}
+
+		function exportUsersToCsv(data) { 
+			var dataToUsersCsv="";
+
+		    for (var i=0; i<data['headerUser'].length; i++) {
+		    	dataToUsersCsv += data['headerUser'][i]+data['delimiter'];
+		    }
+
+		    dataToUsersCsv += "\n";
+
+		    for (var j=0; j<data['users'].length; j++) {
+		    	for (var k=0; k<data['headerUser'].length; k++) {
+		    		dataToUsersCsv += data['users'][j][data['headerUser'][k]]+data['delimiter'];
+			    }
+			   
+			    dataToUsersCsv += "\n";
+		    }
+			return dataToUsersCsv;
+		}
+
 	    $.ajax({
             type: 'POST',
-            url: '/admin/export/allEvents',
+            url: '/admin/export/allData',
        		success : function(data){ 
        			var zip = new JSZip();
-       			var events = zip.folder(data['exportName']);
-       			var alerts = events.folder('alerts');
-       			events.add("events."+data['fileType'], exportEventsToCsv(data, alerts));
+       			var exportFolder = zip.folder(data['exportName']);
+       			var alertsFolder = exportFolder.folder('alerts');
+       			exportFolder.add("events."+data['fileType'], exportEventsToCsv(data, alertsFolder));
+       			exportFolder.add("notifications."+data['fileType'], exportNotificationsToCsv(data));
+       			exportFolder.add("users."+data['fileType'], exportUsersToCsv(data));
 				content = zip.generate();
 				location.href="data:application/zip;base64,"+content;
        		}

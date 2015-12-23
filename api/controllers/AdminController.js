@@ -27,7 +27,7 @@ module.exports = {
 	},
 
 	notifications: function(req, res) {
-		Notification.query ('SELECT notification.id, notification.user, notification.relatedUser, notification.subject, notification.content, notification.receiverState, notification.createdAt, user.username, relatedUser.username as relatedUsername FROM notification INNER JOIN user, user AS relatedUser WHERE user.id=notification.user AND relatedUser.id=notification.relatedUser ORDER BY createdAt DESC', function (err, listNotifications) { 
+		Notification.query ('SELECT notification.id, notification.user, notification.relatedUser, notification.subject, notification.content, notification.createdAt, user.username, relatedUser.username as relatedUsername FROM notification INNER JOIN user, user AS relatedUser WHERE user.id=notification.user AND relatedUser.id=notification.relatedUser ORDER BY createdAt DESC', function (err, listNotifications) { 
 			res.view('admin/liste/notifications', {
 				typeNotifications: 'notifications',
 				myNotifications: req.session.myNotifications,
@@ -175,23 +175,27 @@ module.exports = {
 
 	},
 
-	exportAllEvents: function (req, res) {
-		var exportEventsSend = function (req, res) {
+	exportAllData: function (req, res) {
+		var sendExportAllData = function (req, res) {
 			var now = new Date();
-			var exportAllEvents = {
+			var exportAllData = {
 				fileType: 'csv',
 				exportName: "export-"+now.getDate()+"_"+now.getMonth()+"_"+now.getFullYear()+"-"+now.getHours()+"_"+now.getMinutes()+"_"+now.getSeconds(),
 				delimiter: ";",
-				headerEvent: ["id", "organizer", "title", "description", "date", "place", "state", "createdAt", "updatedAt"],
-				headerAlert: ["id", "type", "user", "details", "place", "isAnonymous", "isDeleted", "createdAt", "updatedAt"],
-				events: req.session.listEvents
+				headerEvent: ["id", "organizer", "title", "description", "date", "place", "state", "typesAlert", "createdAt", "updatedAt"],
+				headerAlert: ["id", "type", "user", "details", "place", "isAnonymous", "isDeleted", "scouts", "createdAt", "updatedAt"],
+				headerUser: ["id", "email", "username", "type", "createdAt", "updatedAt"],
+				headerNotifications: ["id", "subject", "content", "senderState", "receiverState", "user", "username", "relatedUser", "relatedUsername", "createdAt"],
+				events: req.session.listEvents,
+				users:req.session.users,
+				notifications: req.session.listNotifications
 			};
-			res.send(exportAllEvents);
+			res.send(exportAllData);
 		};
 
 		var findScout = function(i, j) {
 			if (i == req.session.listEvents.length) {
-				exportEventsSend(req, res);
+				sendExportAllData(req, res);
 			} else if ( req.session.listEvents[i]['alerts'].length > 0 && j<req.session.listEvents[i]['alerts'].length ) {
 				Scout.find({ alert: req.session.listEvents[i]['alerts'][j].id }).then (function (scouts) {
 					req.session.listEvents[i]['alerts'][j].scouts = scouts;
@@ -229,13 +233,17 @@ module.exports = {
 			req.session.users = users;
 		});
 
+		Notification.query ('SELECT notification.id, notification.user, notification.relatedUser, notification.subject, notification.content, notification.senderState, notification.receiverState, notification.createdAt, user.username, relatedUser.username as relatedUsername FROM notification INNER JOIN user, user AS relatedUser WHERE user.id=notification.user AND relatedUser.id=notification.relatedUser ORDER BY createdAt DESC', function (err, listNotifications) { 
+			req.session.listNotifications = listNotifications;
+		});
+
 		Event.find().then (function (listEvents) {
 			req.session.listEvents = listEvents;
 
 			if ( listEvents.length > 0 ) {
 				findTypesAlert(0);
 			} else {
-				exportEventsSend();
+				sendExportAllData();
 			}
 		});
 	},
