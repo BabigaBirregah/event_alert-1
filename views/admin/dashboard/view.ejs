@@ -78,7 +78,7 @@
 
 	$( "#export_specific_events" ).click(function() {
 		var specificEvents = $(".check_event:checked");
-		var idSpecificEvents = [];
+		var idSpecificEvents = ["0"];
 
 		for (var i=0; i<specificEvents.length; i++ ) {
 			idSpecificEvents.push(specificEvents[i].id);
