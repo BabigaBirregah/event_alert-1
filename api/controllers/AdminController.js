@@ -223,50 +223,47 @@ module.exports = {
 
 		var exportSpecificEvents = function (req, res) {
 			var idSpecificEvents = req.allParams()['idSpecificEvents'].split(',');
-			var whereQuery = "WHERE ";
+			req.session.whereQuery = "WHERE (";
 
 			for (var i=0; i<idSpecificEvents.length; i++) {
 				if ( i!=0 ) {
-					whereQuery += " OR ";
+					req.session.whereQuery += " OR ";
 
 				}
-				whereQuery += "id="+idSpecificEvents[i];
+				req.session.whereQuery += "id="+idSpecificEvents[i];
 			}
-			Event.query ('SELECT * FROM event '+whereQuery, function (err, listEvents) { 
-				req.session.listEvents = listEvents;
-
-				if ( listEvents.length > 0 ) {
-					findTypesAlert(0);
-				} else {
-					sendExport(req, res);
-				}
-			});	
-		}
-
-		var exportAllData = function (req, res) {
-			Event.find().then (function (listEvents) {
-				req.session.listEvents = listEvents;
-
-				if ( listEvents.length > 0 ) {
-					findTypesAlert(0);
-				} else {
-					sendExport(req, res);
-				}
-			});	
+			req.session.whereQuery += ")"
 		}
 
 		var exportEventsFiltered = function (req, res) {
 			var idStatutEventFiltered = req.allParams()['idStatutEventFiltered'].split(',');
-			var whereQuery = "WHERE ";
+			if ( req.session.whereQuery == "" ) {
+				req.session.whereQuery = "WHERE (";
+			} else {
+				req.session.whereQuery += " AND (";
+			}
 
 			for (var i=0; i<idStatutEventFiltered.length; i++) {
 				if ( i!=0 ) {
-					whereQuery += " OR ";
+					req.session.whereQuery += " OR ";
 
 				}
-				whereQuery += "state="+idStatutEventFiltered[i];
+				req.session.whereQuery += "state="+idStatutEventFiltered[i];
 			}
-			Event.query ('SELECT * FROM event '+whereQuery, function (err, listEvents) { 
+			req.session.whereQuery += ")";
+		}
+
+		var exportData = function (req, res) {
+			req.session.whereQuery = "";
+
+			if ( req.allParams()['idSpecificEvents'] != undefined ) {
+				exportSpecificEvents(req, res);
+			}
+			if ( req.allParams()['idStatutEventFiltered'] != undefined ) {
+				exportEventsFiltered(req, res);
+			}
+
+			Event.query ('SELECT * FROM event '+req.session.whereQuery, function (err, listEvents) { 
 				req.session.listEvents = listEvents;
 
 				if ( listEvents.length > 0 ) {
@@ -274,7 +271,7 @@ module.exports = {
 				} else {
 					sendExport(req, res);
 				}
-			});
+			});	
 		}
 
 		var findScout = function(i, j) {
@@ -321,13 +318,7 @@ module.exports = {
 			req.session.listNotifications = listNotifications;
 		});
 
-		if ( req.allParams()['idSpecificEvents'] != undefined ) {
-			exportSpecificEvents(req, res);
-		} else if ( req.allParams()['idStatutEventFiltered'] != undefined ) {
-			exportEventsFiltered(req, res);
-		} else {
-			exportAllData(req, res);
-		}
+		exportData(req, res);
 	},
 };
 

@@ -66,7 +66,6 @@ function exportEventsToCsv(data, alertsFolder) {
 }
 
 function exportNotificationsToCsv(data) { 
-	console.log(data['notifications']);
 	var dataToNotificationsCsv="";
 
     for (var i=0; i<data['headerNotifications'].length; i++) {

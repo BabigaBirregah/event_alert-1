@@ -50,7 +50,7 @@
 		        						<div class="tools">
 		        							<div style="width:100px">
 		        								Export all event
-		        								<center><a id="export_all_event"><span class="glyphicon glyphicon-cloud-download" style="font-size:40px;"></span></a></center>
+		        								<center><a id="export_all_data"><span class="glyphicon glyphicon-cloud-download" style="font-size:40px;"></span></a></center>
 		        							</div>
 		        						</div>
 	        						</center>
@@ -84,7 +84,7 @@
 		content = zip.generate();
 		location.href="data:application/zip;base64,"+content;
 	}
-	$( "#export_all_event" ).click(function() {
+	$( "#export_all_data" ).click(function() {
 	    $.ajax({
             type: 'POST',
             url: '/admin/export/data',
@@ -128,6 +128,17 @@
 		}
 
 		var params = "idStatutEventFiltered="+idStatutEventFiltered;
+
+		if ($("#include_specific_events").is(':visible')) {
+			var specificEvents = $(".check_event:checked");
+			var idSpecificEvents = ["0"];
+
+			for (var i=0; i<specificEvents.length; i++ ) {
+				idSpecificEvents.push(specificEvents[i].id);
+			}
+
+			params += "&idSpecificEvents="+idSpecificEvents;
+		} 
 
 	    $.ajax({
             type: 'POST',
