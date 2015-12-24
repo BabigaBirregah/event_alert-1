@@ -150,7 +150,7 @@
         });
     }
 
-    $( ".btn-event" ).on("click", function(){
+    $(document).on("click", ".btn-event", function(){
         if ( $(this).attr("title") == 'approved' ) {
             var params = "id="+$(this).parent()[0].id+"&state=2";
             $.ajax({
