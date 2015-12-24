@@ -24,7 +24,6 @@ module.exports = {
 		req.flash('type_flash_message', 'info');
 		req.flash('flash_message', 'Votre événement est en cours de modération');
 		res.redirect('organizer');
-	}
-	
+	},
 };
 

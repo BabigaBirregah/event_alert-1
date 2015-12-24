@@ -1,0 +1,70 @@
+<link rel="stylesheet" type="text/css" href="/styles/jquery.datetimepicker.css"/>
+<link rel="stylesheet" type="text/css" href="/styles/badgebox.css"/>
+<div class="modal" id="modal-events-filtered" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+	<div class="modal-dialog"  style="width:100%">
+	    <div class="modal-content">
+	        <div class="modal-body">
+				<div class="container">
+					<form class="form-horizontal" role="form">
+					    <fieldset>
+					      	<legend>Filtre événements</legend>
+					      	<div class="form-group">
+					        	<label class="col-lg-3 control-label" for="card-number">Statut : </label> 
+								<label for="statut_a_valider" class="btn btn-warning"><i class="fa fa-exclamation-triangle"></i> A valider <input type="checkbox" id="statut_a_valider" class="badgebox" checked><span class="badge">&check;</span></label>
+								<label for="statut_unlocked" class="btn btn-success"><i class="fa fa-unlock"></i> Validé <input type="checkbox" id="statut_unlocked" class="badgebox" checked><span class="badge">&check;</span></label>
+								<label for="statut_locked" class="btn btn-danger"><i class="fa fa-lock"></i> Bloqué <input type="checkbox" id="statut_locked" class="badgebox" checked><span class="badge">&check;</span></label>
+								<label for="statut_deleted" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Supprimé <input type="checkbox" id="statut_deleted" class="badgebox" checked><span class="badge">&check;</span></label>
+					      	</div>
+					    </fieldset>
+						<fieldset>
+					      	<legend>Filtre alertes</legend>
+					      	<div class="form-group">
+					        	<label class="col-lg-3 control-label" for="expiry-month">Sélectionner une période : </label>
+					        	<div class="col-lg-9">
+					          		<div class="row">
+					            		<div class="col-xs-3">
+					            			<input type="text" name="startDate" class="datepicker_mask form-control"/>
+					            		</div>
+						            	<div class="col-xs-3">
+						              		<input type="text" name="endDate" class="datepicker_mask form-control"/>
+						            	</div>
+						            	<button type="button" class="btn btn-default btn-md" aria-label="Left Align">
+  											<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>
+										</button>		            	
+					          		</div>
+					        	</div>
+					      	</div>
+					      	<div class="form-group">
+					        	<label class="col-lg-3 control-label" for="card-number">Type(s) d'alerte : </label> 
+					        	<div class="col-lg-5">
+					          		<div class="list well" style="max-height: 150px;overflow: auto;">
+										<div class="input-group">
+									        <span class="input-group-addon glyphicon glyphicon-search"></span>
+									        <input type="text" name="SearchList" class="form-control" placeholder="search" />
+									    </div>
+										<ul id="list_type_alert" class="list-group checked-list-box">
+											<% for (var i=0; i<listTypeAlert.length; i++) {%>
+												<li id="<%- listTypeAlert[i].id %>" class="list-group-item" data-checked="true"><%- listTypeAlert[i].name %></li>
+											<%}%>
+									    </ul>
+									</div>
+					        	</div>
+					      	</div>
+					    </fieldset>
+					</form>
+				</div>
+	        </div>
+	    </div>
+	</div>
+</div>
+<script src="/js/checked-list-group.js"></script>
+<script src="/js/jquery.datetimepicker.full.js"></script>
+<script type="text/javascript">
+	/* Mask DatePicker */
+	$('.datepicker_mask').datetimepicker({
+		mask:'9999/19/39',
+		timepicker:false,
+		format:'Y/m/d',
+		formatDate:'Y/m/d',
+	});
+</script>

@@ -15,7 +15,7 @@
     	<% include panels.ejs %>
     	<div class="container-fluid">
 			<div class="container-page">		
-				<div class="col-md-5">
+				<div class="col-md-4">
 					<div class="panel panel-default">
     					<div class="panel-heading">
     						<h3 class="panel-title">Export</h3>
@@ -23,26 +23,43 @@
     					<div class="panel-body">
         					<ul class="list-group">
         						<li class="list-group-item">
-	        						<div class="tools">
-	        							<div style="width:165px">
-	        								Export specific events <a style="margin-left: 5px"><i id="specific_events" class="fa fa-tasks fa-1x"></i></a>
-	        								<center><a id="export_specific_events"><span class="glyphicon glyphicon-cloud-download" style="font-size:40px;"></span></a></center>
-	        							</div>
-	        						</div>
+        							<center>
+	        							<div class="tools">
+		        							<div style="width:165px">
+		        								Export specific events <a style="margin-left: 5px"><i id="specific_events" class="fa fa-tasks fa-1x"></i></a>
+		        								<center><a id="export_specific_events"><span class="glyphicon glyphicon-cloud-download" style="font-size:40px;"></span></a></center>
+		        							</div>
+		        						</div>
+	        						</center>
         						</li>
         						<li class="list-group-item">
-	        						<div class="tools">
-	        							<div style="width:100px">
-	        								<div>Export all event</div>
-	        								<center><a id="export_all_event"><span class="glyphicon glyphicon-cloud-download" style="font-size:40px;"></span></a></center>
-	        							</div>
-	        						</div>
+        							<center>
+		        						<div class="tools">
+		        							<div style="width:189px">
+		        								Export events filtered <a id="events_filtered"><i class="glyphicon glyphicon-filter"></i></a>
+		        								<a><span id="include_specific_events" class="check_specific_events glyphicon glyphicon-check" style="display:none"></span></a>
+		        								<a><span id="exclude_specific_events" class="check_specific_events glyphicon glyphicon-unchecked"></span></a>
+		        								
+		        								<center><a id="export_events_filtered"><span class="glyphicon glyphicon-cloud-download" style="font-size:40px;"></span></a></center>
+		        							</div>
+		        						</div>
+	        						</center>
+        						</li>
+        						<li class="list-group-item">
+	        						<center>
+		        						<div class="tools">
+		        							<div style="width:100px">
+		        								Export all event
+		        								<center><a id="export_all_event"><span class="glyphicon glyphicon-cloud-download" style="font-size:40px;"></span></a></center>
+		        							</div>
+		        						</div>
+	        						</center>
         						</li>
         					</ul>
     					</div>
     				</div>
 				</div>
-				<div class="col-md-7">
+				<div class="col-md-8">
 					<h3 class="dark-grey">Localisation..</h3>
 					<div id="map" style="width:910px;height:500px;"></div>
 				</div>
@@ -50,6 +67,7 @@
 		</div>
     </div>    
     <% include modal_specific_events.ejs %>
+    <% include modal_events_filtered.ejs %>
 </div>
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js"></script>
 <script src="/js/jquery.js"></script>
@@ -93,13 +111,28 @@
        		success : function(data){ 
           		exportData(data);
        		}
-       });
+       	});
 	});
 
 	$('#specific_events').on('click', function(event) {
         event.preventDefault();
         $('#modal-specific-events').modal('show');
-    })
+    });
+
+    $('.check_specific_events').on('click', function(event) {
+        if ($(this)[0].id == 'exclude_specific_events') {
+        	$("#exclude_specific_events").hide();
+        	$("#include_specific_events").show();
+        } else {
+        	$("#exclude_specific_events").show();
+        	$("#include_specific_events").hide();
+        }
+    });
+
+    $('#events_filtered').on('click', function(event) {
+        event.preventDefault();
+        $('#modal-events-filtered').modal('show');
+    });
 
 	function initMap() {
 	  	var troyes = {lat: 48.2973451, lng: 4.0744009};
