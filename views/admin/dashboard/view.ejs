@@ -119,6 +119,26 @@
         $('#modal-specific-events').modal('show');
     });
 
+    $( "#export_events_filtered" ).click(function() {
+    	var statutEventFiltered = $(".statut_event_filtered:checked");
+		var idStatutEventFiltered = ["0"];
+
+		for (var i=0; i<statutEventFiltered.length; i++ ) {
+			idStatutEventFiltered.push(statutEventFiltered[i].id.charAt(0));
+		}
+
+		var params = "idStatutEventFiltered="+idStatutEventFiltered;
+
+	    $.ajax({
+            type: 'POST',
+            data: params,
+            url: '/admin/export/data',
+       		success : function(data){ 
+				exportData(data);
+       		}
+       	});
+	});
+
     $('.check_specific_events').on('click', function(event) {
         if ($(this)[0].id == 'exclude_specific_events') {
         	$("#exclude_specific_events").hide();

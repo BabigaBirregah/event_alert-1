@@ -255,6 +255,28 @@ module.exports = {
 			});	
 		}
 
+		var exportEventsFiltered = function (req, res) {
+			var idStatutEventFiltered = req.allParams()['idStatutEventFiltered'].split(',');
+			var whereQuery = "WHERE ";
+
+			for (var i=0; i<idStatutEventFiltered.length; i++) {
+				if ( i!=0 ) {
+					whereQuery += " OR ";
+
+				}
+				whereQuery += "state="+idStatutEventFiltered[i];
+			}
+			Event.query ('SELECT * FROM event '+whereQuery, function (err, listEvents) { 
+				req.session.listEvents = listEvents;
+
+				if ( listEvents.length > 0 ) {
+					findTypesAlert(0);
+				} else {
+					sendExport(req, res);
+				}
+			});
+		}
+
 		var findScout = function(i, j) {
 			if (i == req.session.listEvents.length) {
 				sendExport(req, res);
@@ -301,6 +323,8 @@ module.exports = {
 
 		if ( req.allParams()['idSpecificEvents'] != undefined ) {
 			exportSpecificEvents(req, res);
+		} else if ( req.allParams()['idStatutEventFiltered'] != undefined ) {
+			exportEventsFiltered(req, res);
 		} else {
 			exportAllData(req, res);
 		}
