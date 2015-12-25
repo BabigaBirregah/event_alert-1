@@ -7,11 +7,15 @@
 		
 		<ul class="dropdown-menu mega-dropdown-menu row">
 			<li class="col-sm-12">
-                <form class="form" action="alert/create" method="post" role="form">
+                <form id="form_create_alert" class="form" action="alert/create" method="post" role="form">
 					<div class="container-fluid">
 					    <section class="container">
 							<div class="container-page">				
-								<div class="col-md-6">
+								<div id="container-form" class="col-md-6">
+								    <div class="alert alert-danger page-alert" id="alert-address-invalid" style="display:none">
+								        <button type="button" class="close"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+								        <strong>Lieu invalide</strong>
+								    </div>
 									<%- partial('../flash-message-panel.ejs') %>
 									<h3 class="dropdown-header">Alerter un incident</h3>
 
@@ -85,6 +89,46 @@
 		$( "#id_create_alert_tab" ).trigger( "click" );		
 	});
 
+    $('.page-alert .close').click(function(e) {
+        e.preventDefault();
+        $(this).closest('.page-alert').slideUp();
+    });
+
+	$("#form_create_alert").submit(function(e) {
+		var self = this;
+	    e.preventDefault();
+
+	    var geocoder = new google.maps.Geocoder();
+		geocoder.geocode({
+		    "address": $("#autocomplete").val()
+		}, function(results) {
+			if ( results[0] != undefined ) {
+				var location = results[0].geometry.location.toString().replace('(', '').replace(')', '').replace(',', ';');
+				$("#autocomplete").val(location);
+		    	self.submit();
+			} else {
+			    e.preventDefault();
+		        var id = $(this).attr('data-toggle-id');
+		        var alert = $('#alert-address-invalid');
+		        var timeOut;
+		        alert.appendTo('.page-alerts');
+		        alert.slideDown();
+		        
+		        var delay = $(this).attr('data-delay');
+		        if (delay != undefined) {
+		            delay = parseInt(delay);
+		            clearTimeout(timeOut);
+		            timeOut = window.setTimeout(function() {
+		                    alert.slideUp();
+		                }, delay
+					);
+		        }
+			}
+		});
+	    
+	});
+
+	// Map
     var events = <%- JSON.stringify(listEvent) %>;
 	var map;
 	var markersMap = [];
