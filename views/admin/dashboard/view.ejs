@@ -5,6 +5,7 @@
 		margin-top: 50px;
 	}
 </style>
+<link rel="stylesheet" type="text/css" href="/styles/badge.css">
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
@@ -73,6 +74,7 @@
 <script src="/js/jquery.js"></script>
 <script src="/js/jszip.js"></script>
 <script src="/js/exportToCsv.js"></script>
+<script src="/js/markerclusterer.js"></script>
 <script type="text/javascript">
 	var exportData = function(data) {
 		var zip = new JSZip();
@@ -191,15 +193,33 @@
         $('#modal-events-filtered').modal('show');
     });
 
-	function initMap() {
-	  	var troyes = {lat: 48.2973451, lng: 4.0744009};
+    var listAlerts = <%- JSON.stringify(listAlerts) %>;
 
-		map = new google.maps.Map(document.getElementById('map'), {
-		    zoom: 8,
-		    center: troyes,
-		    mapTypeId: google.maps.MapTypeId.TERRAIN
-		});
+	var center = new google.maps.LatLng(46.61926103617151, 2.4169921875);
+	var options = {
+	  	'zoom': 6,
+	  	'center': center,
+	  	'mapTypeId': google.maps.MapTypeId.ROADMAP
+	};
+
+	var map = new google.maps.Map(document.getElementById("map"), options);
+	var infowindow = new google.maps.InfoWindow();
+
+	var markers = [];
+	for (var i = 0; i < listAlerts.length; i++) {
+		var latLngStr = listAlerts[i].place.split(';');
+	  	var latLng = new google.maps.LatLng(latLngStr[0], latLngStr[1]);
+	  	var marker = new google.maps.Marker({'position': latLng});
+	  	google.maps.event.addListener(marker,'click', (function(marker, alert){ 
+			    return function() {
+			    	var alertHtml = "<div class=\"offer offer-radius offer-primary\"><div class=\"shape\"><div class=\"shape-text\">Alert</div></div><div id=\"alert_content\" class=\"offer-content\">";
+			    	alertHtml += "<table class=\"table table-user-information\"><tbody><tr><td>Event : </td><td>"+alert.event+"</td></tr><tr><td>Type:</td><td>"+alert.type+"</td></tr><tr><td>User:</td><td>"+alert.user+"</td></tr><tr><td>Details:</td><td>"+alert.details+"</td></tr><tr><td>Place:</td><td>"+alert.place+"</td></tr><tr><td>isAnonymous:</td><td>"+alert.isAnonymous+"</td></tr><tr><td>isDeleted:</td><td>"+alert.isDeleted+"</td></tr><tr><td>Date:</td><td>"+alert.createdAt+"</td></tr>";
+
+			        infowindow.setContent(alertHtml);
+			        infowindow.open(map,marker);
+			    };
+			})(marker, listAlerts[i])); 
+	  	markers.push(marker);
 	}
-
-	google.maps.event.addDomListener(window, 'load', initMap);
+	var markerCluster = new MarkerClusterer(map, markers);
 </script>

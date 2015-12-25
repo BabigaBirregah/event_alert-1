@@ -14,6 +14,7 @@ module.exports = {
 				numberNotifications: req.session.numberNotifications,
 				listEvents: req.session.listEvents,
 				listTypeAlert: req.session.listTypeAlert,
+				listAlerts: req.session.listAlerts,
 				numberAlerts: req.session.numberAlerts
 			});
 		}
@@ -38,15 +39,18 @@ module.exports = {
 					req.session.numberAlerts = numberAlerts;
 					TypeAlert.query ('SELECT id, name FROM typealert GROUP BY name', function (err, listTypeAlert) { 
 						req.session.listTypeAlert = listTypeAlert;
+						Alert.find().then (function (listAlerts) {
+						req.session.listAlerts = listAlerts;
 
-						Event.find().then (function (listEvents) {
-							req.session.listEvents = listEvents;
+							Event.find().then (function (listEvents) {
+								req.session.listEvents = listEvents;
 
-							if ( listEvents.length > 0 ) {
-								findTypesAlert(0);
-							} else {
-								render(req, res);
-							}
+								if ( listEvents.length > 0 ) {
+									findTypesAlert(0);
+								} else {
+									render(req, res);
+								}
+							});
 						});
 					});
 				});	
