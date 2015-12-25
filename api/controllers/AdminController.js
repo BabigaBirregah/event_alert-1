@@ -265,6 +265,21 @@ module.exports = {
 			}
 		}
 
+		var exportAlertsTypeAlertFiltered = function (req, res) {
+			var typeAlert = req.allParams()['typeAlert'].split(',');
+
+			req.session.whereQuery += " AND (";
+
+			for (var i=0; i<typeAlert.length; i++) {
+				if ( i!=0 ) {
+					req.session.whereQuery += " OR ";
+
+				}
+			 	req.session.whereQuery += "type=\""+typeAlert[i]+"\"";
+			}
+			req.session.whereQuery += ")";
+		}
+
 		var exportData = function (req, res) {
 			req.session.whereQuery = "";
 
@@ -304,6 +319,10 @@ module.exports = {
 
 			if ( req.allParams()['startDate'] != undefined || req.allParams()['endDate'] != undefined ) {
 				exportAlertsDateFiltered(req, res);
+			}
+
+			if ( req.allParams()['typeAlert'] != undefined ) {
+				exportAlertsTypeAlertFiltered(req, res);
 			}
 
 			Alert.query ('SELECT * FROM alert WHERE event='+req.session.listEvents[i].id+req.session.whereQuery, function (err, alerts) { 

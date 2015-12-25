@@ -142,8 +142,18 @@
 		} else {
 			params += "&endDate="+date[1].value;
 		}
-		console.log(date[0].value);
-		console.log(date[1].value);
+
+		var listTypeAlert = $(".check_type_alert");
+
+		var typeAlert = ["0"];
+
+		for (var i=0; i<listTypeAlert.length; i++ ) {
+			if ( listTypeAlert[i].className.indexOf("active") != -1 ) {
+				typeAlert.push(listTypeAlert[i].innerText);
+			}
+		}
+
+		params += "&typeAlert="+typeAlert;
 
 		if ($("#include_specific_events").is(':visible')) {
 			var specificEvents = $(".check_event:checked");
