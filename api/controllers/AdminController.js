@@ -253,6 +253,18 @@ module.exports = {
 			req.session.whereQuery += ")";
 		}
 
+		var exportAlertsDateFiltered = function (req, res) {
+			var startDate = req.allParams()['startDate'];
+			var endDate = req.allParams()['endDate'];
+
+			if ( startDate != "0" ) {
+				req.session.whereQuery += " AND createdAt >= '"+startDate+"'";
+			}
+			if ( endDate != "0" ) {			
+				req.session.whereQuery += " AND createdAt <= '"+endDate+"'";
+			}
+		}
+
 		var exportData = function (req, res) {
 			req.session.whereQuery = "";
 
@@ -267,7 +279,7 @@ module.exports = {
 				req.session.listEvents = listEvents;
 
 				if ( listEvents.length > 0 ) {
-					findTypesAlert(0);
+					findTypesAlert(req, res, 0);
 				} else {
 					sendExport(req, res);
 				}
@@ -287,25 +299,31 @@ module.exports = {
 			}
 		};
 
-		var findAlerts = function(i) {
-			Alert.find({ event: req.session.listEvents[i].id }).then (function (alerts) {
+		var findAlerts = function(req, res, i) {
+			req.session.whereQuery = "";
+
+			if ( req.allParams()['startDate'] != undefined || req.allParams()['endDate'] != undefined ) {
+				exportAlertsDateFiltered(req, res);
+			}
+
+			Alert.query ('SELECT * FROM alert WHERE event='+req.session.listEvents[i].id+req.session.whereQuery, function (err, alerts) { 
 				req.session.listEvents[i]['alerts'] = alerts;
 				
 				if (i < req.session.listEvents.length-1) {
-					findAlerts(i+1);
+					findAlerts(req, res, i+1);
 				} else {
 					findScout(0, 0);
 				}
 			});
 		};
-		var findTypesAlert = function(i) {
+		var findTypesAlert = function(req, res, i) {
 			TypeAlert.find({ event: req.session.listEvents[i].id }).then (function (typesAlert) {
 				req.session.listEvents[i]['typesAlert'] = typesAlert;
 				
 				if (i < req.session.listEvents.length-1) {
-					findTypesAlert(i+1);
+					findTypesAlert(req, res, i+1);
 				} else {
-					findAlerts(0);
+					findAlerts(req, res, 0);
 				}
 			});
 		};	

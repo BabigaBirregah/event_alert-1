@@ -129,6 +129,22 @@
 
 		var params = "idStatutEventFiltered="+idStatutEventFiltered;
 
+		var date = $(".date_event_filtered");
+
+		if ( date[0].value == '____/__/__' ) {
+			params += "&startDate=0";
+		} else {
+			params += "&startDate="+date[0].value;
+		}
+
+		if ( date[1].value == '____/__/__' ) {
+			params += "&endDate=0";
+		} else {
+			params += "&endDate="+date[1].value;
+		}
+		console.log(date[0].value);
+		console.log(date[1].value);
+
 		if ($("#include_specific_events").is(':visible')) {
 			var specificEvents = $(".check_event:checked");
 			var idSpecificEvents = ["0"];
